@@ -136,7 +136,7 @@ void JTAGDisable_GPIO_NoRemap(void)
 void LED_GPIO_Config(void);
 void ControlDI_AGV_GPIO_Config(void);
 void ControlDO_AGV_GPIO_Config(void);
-void RFIDReader(void);
+u8 RFIDReader(void);
 void MotoBelt(u16 direction);
 void MotoBeltControl(void);//皮带电机通信控制
 u8  InfraredDetection(void);
@@ -262,7 +262,7 @@ int main(void)
 // //***********SysTick Testing*********************
 	
 	
-	Delay(6000);
+	Delay(5000);
 	
 	while(1)
  { 
@@ -284,8 +284,7 @@ int main(void)
 		*************/
 		
 		
-		UART1GetByte();
-		RFIDReader();		
+	
 
 		
 /*********以下是AGV Control*************/
@@ -314,7 +313,8 @@ int main(void)
 // 		}
 // 		
 		
-
+		UART1GetByte();
+		RFIDReader();	
 		
 			MotoBeltControl();
 		testu8=InfraredDetection();//红外检测板循迹检测
@@ -685,11 +685,12 @@ void  Wifi_Connect(void)
 
 
 	
-void RFIDReader(void)
+u8 RFIDReader(void)
 {
 	unsigned char status;
 	unsigned char RFID_status = RFID_NO ;
 	unsigned char s=0x08;
+	u8 CardNumber;
 // /*>>>>>>>>>>>RFID>>>>>>>>>>>*/				
 	switch (RFID_status)	{
 		case RFID_NO :    status = PcdRequest(PICC_REQALL,CT);/*尋卡*/
@@ -733,6 +734,8 @@ void RFIDReader(void)
 																	if(USFlag !=0)
 																	{
 																		 printf("READ_MI_OK the %d area data is  %02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x     \n",s,RFID[0],RFID[1],RFID[2],RFID[3],RFID[4],RFID[5],RFID[6],RFID[7],RFID[8],RFID[9],RFID[10],RFID[11],RFID[12],RFID[13],RFID[14],RFID[15]);
+																		 CardNumber=RFID[15]; 
+																		 RFID[15]=0;
 																		 motorQZ_control(TIM2,0,1,4);
 																		 motorQY_control(TIM2,0,2,4);
 																		 motorHZ_control(TIM2,0,3,4);
@@ -752,7 +755,8 @@ void RFIDReader(void)
                              
 				                     RFID_status = RFID_NO;							
 	default: RFID_status = RFID_NO;
-	return;
+	
+	return CardNumber;
 	
 
 // /*<<<<<<<<<<<<<<<<RFID<<<<<<<<<<<<<<*/	

@@ -3,9 +3,9 @@
 <title>Static Call Graph - [..\Output\STM32-DEMO.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\Output\STM32-DEMO.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 24]: Last Updated: Wed Jan 13 10:38:55 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 24]: Last Updated: Wed Jan 13 11:35:54 2016
 <BR><P>
-<H3>Maximum Stack Usage =        200 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        208 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 main &rArr; RFIDReader &rArr; PcdAuthState &rArr; PcdComMF522 &rArr; ClearBitMask &rArr; ReadRawRC
 <P>
@@ -363,8 +363,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RFIDReader
 </UL>
 
-<P><STRONG><a name="[5a]"></a>RFIDReader</STRONG> (Thumb, 416 bytes, Stack size 72 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = RFIDReader &rArr; PcdAuthState &rArr; PcdComMF522 &rArr; ClearBitMask &rArr; ReadRawRC
+<P><STRONG><a name="[5a]"></a>RFIDReader</STRONG> (Thumb, 430 bytes, Stack size 80 bytes, main.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = RFIDReader &rArr; PcdAuthState &rArr; PcdComMF522 &rArr; ClearBitMask &rArr; ReadRawRC
 </UL>
 <BR>[Calls]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorQZ_control
 <LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorQY_control
@@ -391,7 +391,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[46]"></a>main</STRONG> (Thumb, 978 bytes, Stack size 0 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = main &rArr; RFIDReader &rArr; PcdAuthState &rArr; PcdComMF522 &rArr; ClearBitMask &rArr; ReadRawRC
+<BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = main &rArr; RFIDReader &rArr; PcdAuthState &rArr; PcdComMF522 &rArr; ClearBitMask &rArr; ReadRawRC
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_control
 <LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorQZ_control
