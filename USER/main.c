@@ -263,7 +263,7 @@ int main(void)
 // //***********SysTick Testing*********************
 	
 	
-	Delay(5000);
+	Delay(6000);
 	
 		while(1)
 	 { 
