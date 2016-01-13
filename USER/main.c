@@ -817,11 +817,7 @@ void RFIDReader(void)
 // // 			        {
 // // // 									printf("Write_MI_OK the %d area data is  %02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x     \n",s,RFIDWrite[0],RFIDWrite[1],RFIDWrite[2],RFIDWrite[3],RFIDWrite[4],RFIDWrite[5],RFIDWrite[6],RFIDWrite[7],RFIDWrite[8],RFIDWrite[9],RFIDWrite[10],RFIDWrite[11],RFIDWrite[12],RFIDWrite[13],RFIDWrite[14],RFIDWrite[15]);
 // // 								testt=1;  
-// // 								status=MI_ERR;
-// // 								
-// // 							
-// // 							
-// // 						
+// // 								status=MI_ERR; 						
 // // 						  }
 // 						
 // 					}
