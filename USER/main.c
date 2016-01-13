@@ -265,75 +265,23 @@ int main(void)
 	
 	Delay(5000);
 	
-	while(1)
- { 
-		if(espFlag==0) //在未曾连上WIFI时候，才进行WIFI链接操作，链接上后将不再执行此操作。
-		{ 
-			Wifi_Connect();
-		}
-	 				
-		
-    while (espFlag)
-  {
- /***************  模拟量采集程序，暂时不用，屏蔽掉。  
-// 	   AD_value  = 3300000/4096*ADC_ConvertedValue/1000;
-// 	   
-// 	   printf("AD value = %d mV  \r\n", AD_value);
-// 		Delay(50);
-// 		 printf("AD value = %d mV  \r\n", (u32)ADC_ConvertedValue); 
-// 		Delay(50);
-		*************/
-		
-		
-	
-
-		
-/*********以下是AGV Control*************/
-	
-// 		if(LEDFlag==0)
-// 		{
-// 			GPIO_SetBits(GPIOB,GPIO_Pin_8);
-// 			LEDcounter++;
-// 			if(LEDcounter>=150) 
-// 			{
-// 				LEDcounter=0;
-// 				LEDFlag=1;
-// 			}
-// 		}
-
-// 		
-// 		if(LEDFlag==1)
-// 		{
-// 			GPIO_ResetBits(GPIOB,GPIO_Pin_8);
-// 			LEDcounter++;
-// 			if(LEDcounter>=150) 
-// 			{
-// 				LEDcounter=0;
-// 				LEDFlag=0;
-// 			}
-// 		}
-// 		
-		
-		UART1GetByte();//指令接收
-		RFIDReader();	//射频卡检测		
-		MotoBeltControl();//转运皮带控制
-		AGVRun();	//小车行进自我控制
-		
-// 						 motorQZ_control(TIM2,60,1,2);
-// 						 motorQY_control(TIM2,50,2,2);
-// 						 motorHZ_control(TIM2,50,3,2);
-// 						 motorHY_control(TIM2,60,4,2);
-		
+		while(1)
+	 { 
+			if(espFlag==0) //在未曾连上WIFI时候，才进行WIFI链接操作，链接上后将不再执行此操作。
+			{ 
+				Wifi_Connect();
+			}
+									
+			while (espFlag)
+			{
 			
-		
+				UART1GetByte();//指令接收
+				RFIDReader();	//射频卡检测		
+				MotoBeltControl();//转运皮带控制
+				AGVRun();	//小车行进自我控制
 
-				
-				
-	
-/*********以下是AGV Control*************/
-
-}
-}
+		 }
+	}
 }
 
 //小车行进控制
@@ -341,6 +289,7 @@ void AGVRun(void)
 		{
 			    u8 testu8;
 					testu8=InfraredDetection();//红外检测板循迹检测
+			/*********以下是AGV Control*************/
 					if(FLAG==0||testu8==0)
 					{ //printf("stop all 0(0),Track= %d %d \n",Track,testu8);
 						
