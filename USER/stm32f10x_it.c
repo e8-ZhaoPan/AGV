@@ -317,7 +317,7 @@ void USART1_IRQHandler(void)	//串口1中断服务程序
 				
 				//***************
 					
-				if(saveBUF==0xAA)
+		if(saveBUF==0xAA)
 		{
 			START_TIME;	 /* TIM3 开始计时 */
 		  zhaopan=1;

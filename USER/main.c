@@ -148,6 +148,7 @@ void TIM3_NVIC_Configuration(void);
 void TIM3_Configuration(void);
 void BOOT1_ReleaseToGPIO(void);
 void RFID_SN_Control(void);
+void AGVRun(void);
 
 
 int main(void)
@@ -313,12 +314,11 @@ int main(void)
 // 		}
 // 		
 		
-		UART1GetByte();
-		RFIDReader();	
-		
-			MotoBeltControl();
+		UART1GetByte();//指令接收
+		RFIDReader();	//射频卡检测		
+		MotoBeltControl();//转运皮带控制
 		testu8=InfraredDetection();//红外检测板循迹检测
-			
+		AGVRun();	//小车行进自我控制
 		
 // 						 motorQZ_control(TIM2,60,1,2);
 // 						 motorQY_control(TIM2,50,2,2);
@@ -326,7 +326,20 @@ int main(void)
 // 						 motorHY_control(TIM2,60,4,2);
 		
 			
+		
+
 				
+				
+	
+/*********以下是AGV Control*************/
+
+}
+}
+}
+
+//小车行进控制
+void AGVRun(void)
+		{
 					if(FLAG==0||testu8==0)
 					{ //printf("stop all 0(0),Track= %d %d \n",Track,testu8);
 						
@@ -446,14 +459,9 @@ int main(void)
 						 motorHY_control(TIM2,0,4,4);
 				}
 
-				
-				
-	
-/*********以下是AGV Control*************/
+			}
 
-}
-}
-}
+
 
 
 //小车皮带正反转控制
