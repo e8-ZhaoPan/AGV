@@ -809,9 +809,7 @@ void RFIDReader(void)
 // // 									printf("READ_MI_OK the %d area data is  %02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x     \n",s,RFID[0],RFID[1],RFID[2],RFID[3],RFID[4],RFID[5],RFID[6],RFID[7],RFID[8],RFID[9],RFID[10],RFID[11],RFID[12],RFID[13],RFID[14],RFID[15]);
 // 								  status=MI_ERR;
 // 									PWMPulseHigh=80;
-// 													
-// 							
-// 						
+					
 // 						  }
 // 							
 // // 							status=PcdWrite(s,RFIDWrite);

@@ -1,6 +1,6 @@
 Dependencies for Project 'STM32-DEMO', Target 'ADC-DEMO': (DO NOT MODIFY !)
 F (..\CMSIS\startup\startup_stm32f10x_hd.s)(0x49D96948)(--cpu Cortex-M3 -g --apcs=interwork --pd "__MICROLIB SETA 1" -I "C:\Keil ARM\ARM\RV31\INC" -I "C:\Keil ARM\ARM\CMSIS\Include" -I "C:\Keil ARM\ARM\Inc\ST\STM32F10x" --list "..\Listing\startup_stm32f10x_hd.lst" --xref -o "..\Output\startup_stm32f10x_hd.o" --depend "..\Output\startup_stm32f10x_hd.d")
-F (.\main.c)(0x5694BB80)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I "C:\Keil ARM\ARM\RV31\INC" -I "C:\Keil ARM\ARM\CMSIS\Include" -I "C:\Keil ARM\ARM\Inc\ST\STM32F10x" -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\main.o" --omf_browse "..\Output\main.crf" --depend "..\Output\main.d")
+F (.\main.c)(0x5695B8AF)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I "C:\Keil ARM\ARM\RV31\INC" -I "C:\Keil ARM\ARM\CMSIS\Include" -I "C:\Keil ARM\ARM\Inc\ST\STM32F10x" -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\main.o" --omf_browse "..\Output\main.crf" --depend "..\Output\main.d")
 I (..\CMSIS\stm32f10x.h)(0x4DECC1EB)
 I (..\CMSIS\core_cm3.h)(0x5693C1A2)
 I (C:\Keil ARM\ARM\ARMCC\bin\..\include\stdint.h)(0x50F96150)
