@@ -81,7 +81,7 @@ volatile u32 T3time=0; // ms 计时变量
 	u8 Wifi_Touchuan=0; //透传标志
   u8 WifiStartR=0;
 //bool T1,T2,T3,T4,T5,clp;  //输入DI变量
-u8 Track,FLAG,testu8; 	 //行动路线
+u8 Track,FLAG; 	 //行动路线
 u8 qiaoshuo=0;
 u8 zhaopan=0;
 u8 timeout=0;//用于接收超时判断
@@ -317,7 +317,6 @@ int main(void)
 		UART1GetByte();//指令接收
 		RFIDReader();	//射频卡检测		
 		MotoBeltControl();//转运皮带控制
-		testu8=InfraredDetection();//红外检测板循迹检测
 		AGVRun();	//小车行进自我控制
 		
 // 						 motorQZ_control(TIM2,60,1,2);
@@ -340,6 +339,8 @@ int main(void)
 //小车行进控制
 void AGVRun(void)
 		{
+			    u8 testu8;
+					testu8=InfraredDetection();//红外检测板循迹检测
 					if(FLAG==0||testu8==0)
 					{ //printf("stop all 0(0),Track= %d %d \n",Track,testu8);
 						

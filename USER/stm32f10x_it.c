@@ -28,7 +28,7 @@
 #include "AGV_pwm.h" 
 #include "Time_test.h"
 
-extern 	u8 Track,FLAG,testu8; 	 //行动路线
+extern 	u8 Track,FLAG; 	 //行动路线
 extern	u8 USART_RX_BUF[64];     //接收缓冲,最大64个字节.
 extern	u8 counter_BUF;
 extern	u8 counter_BUF_LINK;
