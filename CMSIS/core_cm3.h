@@ -1212,7 +1212,7 @@ static __INLINE uint32_t SysTick_Config(uint32_t ticks)
 									(1 << SYSTICK_TICKINT);           //SysTick定时器使能
  																												/* Enable SysTick IRQ and SysTick Timer */
 	
-//		SysTick->CTRL &= 0xFFFFFFFC;          //暂时关闭SysTick时钟中断请求开启,暂时关闭SysTick定时器使能
+		SysTick->CTRL &= 0xFFFFFFFC;          //暂时关闭SysTick时钟中断请求开启,暂时关闭SysTick定时器使能
 // 	//SysTick->CTRL |= 0x00000003;          //打开SysTick时钟中断请求开启,打开SysTick定时器使能								          
 	
 	

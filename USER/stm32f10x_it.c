@@ -49,7 +49,8 @@ extern  u32 SysTickCountFlag_Max;  //SysTick中断计数到
 extern  u32 HighSysTick ;  //SysTick 舵机控制：20ms周期，0.5ms~2.5ms高电平占空比-------0度~180度(高电平时钟控制)
 extern  u32 LowSysTick  ;  //SysTick 舵机控制：20ms周期，0.5ms~2.5ms高电平占空比-------0度~180度(低电平时钟控制)LowSysTick = 2000-HighSysTick；
 extern  u8  High_Low ;   // 在高电平输出时刻还是低电平输出时刻(0-高电平时刻，1-低电平时刻)
-
+u32 flag1=0;
+extern   u8 UploadCardNumber,DownloadCardNumber;
 
 /** @addtogroup Template_Project
   * @{
@@ -161,6 +162,8 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
+
+	flag1++;
 	SysTickCountFlag++;
 	
 	//***********SysTick Testing*********************
@@ -186,6 +189,15 @@ void SysTick_Handler(void)
 	}
 		
 //***********SysTick Testing*********************	
+	
+	if(flag1==30000)
+	{
+		flag1=0; 
+		//GPIO_ResetBits(GPIOB,GPIO_Pin_8);  //低电平结束         
+		SysTick->CTRL &= 0xFFFFFFFC;  
+		
+  }
+	
 	
 }
 
@@ -320,8 +332,7 @@ void USART1_IRQHandler(void)	//串口1中断服务程序
 		if(saveBUF==0xAA)
 		{
 			START_TIME;	 /* TIM3 开始计时 */
-		  zhaopan=1;
-		 
+		  zhaopan=1;	 
 		  timeout=0;
 		}
 		if(zhaopan==1)
@@ -334,52 +345,53 @@ void USART1_IRQHandler(void)	//串口1中断服务程序
 				counter_BUF=0;  //清计数
 				timeout=1;
 				
-						if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0xBB &&USART_RX_BUF[4]==0xCC &&USART_RX_BUF[5]==0xDD)
+					if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0xBB &&USART_RX_BUF[4]==0xCC &&USART_RX_BUF[5]==0xDD)
  					{
 						Track = USART_RX_BUF[2];
-						FLAG =USART_RX_BUF[2];
+						FLAG =USART_RX_BUF[2]; 
 						printf("received %d %d %d %d  %d %d \n",USART_RX_BUF[0],USART_RX_BUF[1],USART_RX_BUF[2],USART_RX_BUF[3],USART_RX_BUF[4],USART_RX_BUF[5]);
-					
 
 					}
 					
-					if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0x5A &&USART_RX_BUF[4]==0xA5 &&USART_RX_BUF[5]==0xA5)
+					if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0x5A &&USART_RX_BUF[4]==0xA5 &&USART_RX_BUF[5]==0xA5) //装载和卸载位置通信
  					{
-						USFlag=USART_RX_BUF[2];					
-            printf("okokokokoko");
-					
+						UploadCardNumber=USART_RX_BUF[2];
+						DownloadCardNumber=USART_RX_BUF[3];	
+         		FLAG=1;//AGV RUN			
+					//	USFlag=USART_RX_BUF[2];					
+            printf("received %d %d %d %d  %d %d \n",USART_RX_BUF[0],USART_RX_BUF[1],USART_RX_BUF[2],USART_RX_BUF[3],USART_RX_BUF[4],USART_RX_BUF[5]);
 
 					}
 					
-					//SysTick控制
-					if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0xBB  &&USART_RX_BUF[4]==0xBB &&USART_RX_BUF[5]==0xAA)
- 					{
-					
-						if(USART_RX_BUF[2]==0x10)
-						{SysTickCountFlag_Max=SysTickCountFlag_1_0ms;
- 						SysTick->CTRL |= 0x00000003;          //打开SysTick时钟中断请求开启,打开SysTick定时器使能	
-						GPIO_SetBits(GPIOB,GPIO_Pin_8);   //上升沿开始
-						printf("10");
-						}
-						if(USART_RX_BUF[2]==0x15)
-						{SysTickCountFlag_Max=SysTickCountFlag_1_5ms;
- 						SysTick->CTRL |= 0x00000003;          //打开SysTick时钟中断请求开启,打开SysTick定时器使能		
-						GPIO_SetBits(GPIOB,GPIO_Pin_8);   //上升沿开始
-						printf("15");
-						}
-						if(USART_RX_BUF[2]==0x20)
-						{SysTickCountFlag_Max=SysTickCountFlag_2_0ms;
- 						SysTick->CTRL |= 0x00000003;          //打开SysTick时钟中断请求开启,打开SysTick定时器使能		
-						GPIO_SetBits(GPIOB,GPIO_Pin_8);   //上升沿开始
-						printf("20");
-						}
-						if(USART_RX_BUF[2]==0x30)
-						{SysTickCountFlag_Max=0;						
- 						SysTick->CTRL &= 0xFFFFFFFC;          //暂时关闭SysTick时钟中断请求开启,暂时关闭SysTick定时器使能
-						GPIO_ResetBits(GPIOB,GPIO_Pin_8);   //下降沿结束
-						printf("30");
-						}
-					}
+// 					//SysTick控制
+// 					if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0xBB  &&USART_RX_BUF[4]==0xBB &&USART_RX_BUF[5]==0xAA)
+//  					{
+// 					
+// 						if(USART_RX_BUF[2]==0x10)
+// 						{SysTickCountFlag_Max=SysTickCountFlag_1_0ms;
+//  						SysTick->CTRL |= 0x00000003;          //打开SysTick时钟中断请求开启,打开SysTick定时器使能	
+// 						GPIO_SetBits(GPIOB,GPIO_Pin_8);   //上升沿开始
+// 						printf("10");
+// 						}
+// 						if(USART_RX_BUF[2]==0x15)
+// 						{SysTickCountFlag_Max=SysTickCountFlag_1_5ms;
+//  						SysTick->CTRL |= 0x00000003;          //打开SysTick时钟中断请求开启,打开SysTick定时器使能		
+// 						GPIO_SetBits(GPIOB,GPIO_Pin_8);   //上升沿开始
+// 						printf("15");
+// 						}
+// 						if(USART_RX_BUF[2]==0x20)
+// 						{SysTickCountFlag_Max=SysTickCountFlag_2_0ms;
+//  						SysTick->CTRL |= 0x00000003;          //打开SysTick时钟中断请求开启,打开SysTick定时器使能		
+// 						GPIO_SetBits(GPIOB,GPIO_Pin_8);   //上升沿开始
+// 						printf("20");
+// 						}
+// 						if(USART_RX_BUF[2]==0x30)
+// 						{SysTickCountFlag_Max=0;						
+//  						SysTick->CTRL &= 0xFFFFFFFC;          //暂时关闭SysTick时钟中断请求开启,暂时关闭SysTick定时器使能
+// 						GPIO_ResetBits(GPIOB,GPIO_Pin_8);   //下降沿结束
+// 						printf("30");
+// 						}
+// 					}
 					
 					
 					

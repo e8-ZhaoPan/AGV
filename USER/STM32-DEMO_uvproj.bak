@@ -492,19 +492,19 @@
               <FilePath>..\FWlib\src\stm32f10x_tim.c</FilePath>
             </File>
             <File>
-              <FileName>misc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>C:\Keil\ARM\RV31\LIB\ST\STM32F10x_StdPeriph_Driver\src\misc.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f10x_bkp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>C:\Keil\ARM\RV31\LIB\ST\STM32F10x_StdPeriph_Driver\src\stm32f10x_bkp.c</FilePath>
+              <FilePath>..\FWlib\src\stm32f10x_bkp.c</FilePath>
+            </File>
+            <File>
+              <FileName>misc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FWlib\src\misc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_spi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>C:\Keil\ARM\RV31\LIB\ST\STM32F10x_StdPeriph_Driver\src\stm32f10x_spi.c</FilePath>
+              <FilePath>..\FWlib\src\stm32f10x_spi.c</FilePath>
             </File>
           </Files>
         </Group>

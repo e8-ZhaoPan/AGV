@@ -1,9 +1,8 @@
-/******************** 鑫盛电子工作室 ********************
+/********************HARDWARE********************
  * 文件名  ：main.c
- * 描述    ：串口1(USART1)向电脑的超级终端以1s为间隔打印当前ADC1的转换电压值         
+ * 描述    ：AGV
  * 实验平台：MINI STM32开发板 基于STM32F103C8T6
  * 库版本  ：ST3.0.0
- * 淘宝店：http://shop66177872.taobao.com
 **********************************************************************************/
 
 #include "stm32f10x.h"
@@ -47,7 +46,7 @@ PA4、5、6、7：SPI1_NSS、SPI1_SCK、SPI1_MISO、SPI1_MOSI
 unsigned char CT[20];//卡类型
 unsigned char SN[4]; //卡号
 unsigned char RFID[16];			//存放RFID 
-unsigned char RFIDWrite[16]={0x00,0x00,0x00,0x00,0x00,0x00,0xff,0x07,0x80,0x29,0xff,0xff,0xff,0xff,0xff,0xff};			//RFID writedata 
+unsigned char RFIDWrite[16]={0x00,0x00,0x00,0x00,0x00,0x00,0xff,0x07,0x80,0x29,0xff,0xff,0xff,0xff,0xff,0x01};			//RFID writedata 
 unsigned char lxl_bit=0;
 unsigned char card1_bit=0;
 unsigned char card2_bit=0;
@@ -60,8 +59,10 @@ unsigned char card_2[4]={66,191,104,0};
 unsigned char card_3[4]={62,84,28,11};
 unsigned char card_4[4]={126,252,248,12};
 u8 KEY[6]={0xff,0xff,0xff,0xff,0xff,0xff};
-unsigned char RFID1[16]={0x00,0x00,0x00,0x00,0x00,0x00,0xff,0x07,0x80,0x29,0xff,0xff,0xff,0xff,0xff,0xff};
-unsigned char senddata1[]={0x41 ,0x54 ,0x2B ,0x43 ,0x49 ,0x50 ,0x53 ,0x54 ,0x41 ,0x52 ,0x54 ,0x3D ,0x22 ,0x54 ,0x43 ,0x50 ,0x22 ,0x2C ,0x22 ,0x31 ,0x30 ,0x2E ,0x30 ,0x2E ,0x31 ,0x2E ,0x35,0X35 ,0x22 ,0x2C ,0x38 ,0x30 ,0x0D ,0x0A };
+unsigned char RFID1[16]={0x00,0x00,0x00,0x00,0x00,0x00,0xff,0x07,0x80,0x29,0xff,0xff,0xff,0xff,0xff,0x01};
+unsigned char senddata1[]={0x41 ,0x54 ,0x2B ,0x43 ,0x49 ,0x50 ,0x53 ,0x54 ,0x41 ,0x52 ,0x54 ,0x3D ,0x22 ,
+	                         0x54 ,0x43 ,0x50 ,0x22 ,0x2C ,0x22 ,0x31 ,0x30 ,0x2E ,0x30 ,0x2E ,0x31 ,0x2E ,
+                           0x31,0X37 ,0x22 ,0x2C ,0x38 ,0x30 ,0x0D ,0x0A };  //10.0.1.17:80
 unsigned char senddata2[]={0x41 ,0x54 ,0x2B ,0x43 ,0x49 ,0x50 ,0x4D ,0x4F ,0x44 ,0x45 ,0x3D ,0x31 ,0x0D ,0x0A };
 unsigned char senddata3[]={0x41 ,0x54 ,0x2B ,0x43 ,0x49 ,0x50  ,0x53 ,0x45 ,0x4E ,0x44, 0x0D ,0x0A };
 u8 USFlag=0;
@@ -80,10 +81,13 @@ volatile u32 T3time=0; // ms 计时变量
   u8 Wifi_Flag=0;
 	u8 Wifi_Touchuan=0; //透传标志
   u8 WifiStartR=0;
+  u8 UploadCardNumber=0,DownloadCardNumber=0;//通信指令指令agv装载位置和卸载位置
+
 //bool T1,T2,T3,T4,T5,clp;  //输入DI变量
-u8 Track,FLAG; 	 //行动路线
+u8 Track; 	 //行动路线
+u8 FLAG;//通过非循迹方式控制agv行走
 u8 qiaoshuo=0;
-u8 zhaopan=0;
+u8 zhaopan=0;//限时接收，在规定时间内接收不完整则抛弃接收内容
 u8 timeout=0;//用于接收超时判断
 u32 SysTickCountFlag =0;  //SysTick中断计数
 u32 SysTickCountFlag_1_0ms =(1000*100);  //SysTick中断1ms计数
@@ -137,6 +141,7 @@ void LED_GPIO_Config(void);
 void ControlDI_AGV_GPIO_Config(void);
 void ControlDO_AGV_GPIO_Config(void);
 u8 RFIDReader(void);
+u8 ReadedCard;
 void MotoBelt(u16 direction);
 void MotoBeltControl(void);//皮带电机通信控制
 u8  InfraredDetection(void);
@@ -149,6 +154,7 @@ void TIM3_Configuration(void);
 void BOOT1_ReleaseToGPIO(void);
 void RFID_SN_Control(void);
 void AGVRun(void);
+void DuoJi(u8 jiaodu);
 
 
 int main(void)
@@ -192,7 +198,7 @@ int main(void)
 			/* 配置SysTick 为10us中断一次 */
 		SysTick_Init();
 	
-	GPIO_SetBits(GPIOB, GPIO_Pin_8);//led off
+	//GPIO_SetBits(GPIOB, GPIO_Pin_8);//led off
 	MotoBelt(0);//0=停止，1=正转，2=反转
 	USART_ITConfig(USART1, USART_IT_RXNE , ENABLE);		//USART1接收中断使能
 		TIM3_NVIC_Configuration(); /* TIM3(中断优先级) 定时配置 */
@@ -200,6 +206,7 @@ int main(void)
 	
 //  	printf("Uart init OK            \n");	
 	InitRc522();				//初始化射频卡模块
+	ReadedCard=0;//初始化读取到的卡号
 // 	printf("Rc522 init OK           \n");
 // 	
 //   printf("\r\n --------This is a ADC testing-----\r\n");
@@ -267,28 +274,71 @@ int main(void)
 	
 		while(1)
 	 { 
+
 			if(espFlag==0) //在未曾连上WIFI时候，才进行WIFI链接操作，链接上后将不再执行此操作。
 			{ 
 				Wifi_Connect();
-			}
-									
+			}						
 			while (espFlag)
-			{
+			{			
 			
 				UART1GetByte();//指令接收
-				RFIDReader();	//射频卡检测		
-				MotoBeltControl();//转运皮带控制
 				AGVRun();	//小车行进自我控制
-
-		 }
+				if( (UploadCardNumber!=0) || (DownloadCardNumber!=0) )//接收到装卸载指令
+				{
+					ReadedCard=RFIDReader();	//射频卡检测
+				
+					while((ReadedCard == UploadCardNumber)&&(UploadCardNumber!=0) && (DownloadCardNumber!=0))  //读到卡片   get into Upload process   
+						{
+							FLAG=0;// AGV STOP
+							DuoJi(250);//舵机转到遮挡位置	
+							Delay(5000);//等待舵机转动到位
+							FLAG=1;//AGV RUN 将水瓶装载
+              Delay(1500);//等待装载完成
+							DuoJi(150);	//舵机转到通过位置
+							Delay(5000);	//等待舵机转动到位
+							PWMPulseHigh=80;//恢复agv行进速度							
+							ReadedCard = 0;   //  get out Upload process	
+              UploadCardNumber=0;				
+							printf("Upload finished");
+						}
+												
+				 while((ReadedCard==DownloadCardNumber) && (UploadCardNumber==0)&& (DownloadCardNumber!=0))
+					{												
+							FLAG=0;// AGV STOP
+							Delay(500);//等待agv停车到位
+							MotoBelt(2);//卸载 
+							Delay(3000);//等待agv卸载到位
+						//	FLAG=1;//AGV RUN
+						  PWMPulseHigh=80;//恢复agv行进速度			
+							ReadedCard = 0;   //  get out Download process		
+							DownloadCardNumber=0;		
+              printf("Download finished");
+					}	
+				
+				}
+		  }
 	}
 }
+
+//舵機角度控制 50-250之間設置，對應0-180度  
+void DuoJi(u8 jiaodu)
+{
+	 HighSysTick=jiaodu;   
+	 SysTick->CTRL |= 0x00000003; 
+}
+
 
 //小车行进控制
 void AGVRun(void)
 		{
 			    u8 testu8;
-					testu8=InfraredDetection();//红外检测板循迹检测
+			if(FLAG!=0)
+			{
+				testu8=InfraredDetection();//红外检测板循迹检测
+			}
+			else testu8=FLAG;
+			
 			/*********以下是AGV Control*************/
 					if(FLAG==0||testu8==0)
 					{ //printf("stop all 0(0),Track= %d %d \n",Track,testu8);
@@ -368,7 +418,7 @@ void AGVRun(void)
 				if(FLAG==7||testu8==7)
 				{	//printf("Turn Right 2(7) ,Track= %d %d \n",Track,testu8);	
 					
-					motorQZ_control(TIM2,PWMPulseMid1,1,3);
+					   motorQZ_control(TIM2,PWMPulseMid1,1,3);
 						 motorQY_control(TIM2,PWMPulseMid1,2,2);
 						 motorHZ_control(TIM2,PWMPulseMid1,3,3);
 						 motorHY_control(TIM2,PWMPulseMid1,4,2);
@@ -636,6 +686,7 @@ void  Wifi_Connect(void)
 			Wifi_Flag=8;  //WIFI连接OK标志(Wifi_Flag=8;)
 			espFlag=1;
 			Wifi_Touchuan=1;
+			printf("WIFI connected");
 		}
 	}
 		
@@ -654,8 +705,9 @@ u8 RFIDReader(void)
 		case RFID_NO :    status = PcdRequest(PICC_REQALL,CT);/*尋卡*/
 											if (status==MI_OK)
 											{
-														 
+												printf("aaa");		 
 												RFID_status = RFID_XunKa_OK;
+												
 												status=MI_ERR;
 												status = PcdAnticoll(SN);/*防冲撞*/	
 											}
@@ -684,6 +736,7 @@ u8 RFIDReader(void)
 														RFID_status = RFID_YanZheng_OK   ;
 														status=MI_ERR;
 														status=PcdRead(s,RFID); //读卡
+														// status=PcdWrite(s,RFIDWrite); //写卡
 													}					
 		
 	case RFID_YanZheng_OK:				
@@ -691,20 +744,18 @@ u8 RFIDReader(void)
 																{  
 																	if(USFlag !=0)
 																	{
-																		 printf("READ_MI_OK the %d area data is  %02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x     \n",s,RFID[0],RFID[1],RFID[2],RFID[3],RFID[4],RFID[5],RFID[6],RFID[7],RFID[8],RFID[9],RFID[10],RFID[11],RFID[12],RFID[13],RFID[14],RFID[15]);
 																		 CardNumber=RFID[15]; 
+																		 printf("READ_MI_OK the %d area data is  %02x  \n",s,RFID[15]);										
 																		 RFID[15]=0;
 																		 motorQZ_control(TIM2,0,1,4);
 																		 motorQY_control(TIM2,0,2,4);
 																		 motorHZ_control(TIM2,0,3,4);
 																		 motorHY_control(TIM2,0,4,4);	
-																		 RFID_SN_Control();
-																		
-																		
-																		
+									//									 RFID_SN_Control();
+						
 																	}
 														 
-                                 PWMPulseHigh=80;																	
+                 //                      PWMPulseHigh=80;																	
 																	RFID_status = RFID_DuKa_OK   ;																	
 																	status=MI_ERR;
 																

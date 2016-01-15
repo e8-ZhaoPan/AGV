@@ -60,13 +60,13 @@ int fputc(int ch, FILE *f)
 
 unsigned char UART1GetByte(void)
 {   	   
-        if(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == SET)
-        {  GetData = USART_ReceiveData(USART1); 
-					 return 1;//收到数据 
-					
+		if(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == SET)
+		{  GetData = USART_ReceiveData(USART1); 
+			 return 1;//收到数据 
+			
 		}
-		    else 
-					 return 0;//没有收到数据 
+		else 
+			 return 0;//没有收到数据 
        
 }
 
