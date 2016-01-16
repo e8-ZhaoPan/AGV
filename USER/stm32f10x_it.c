@@ -51,7 +51,7 @@ extern  u32 LowSysTick  ;  //SysTick 舵机控制：20ms周期，0.5ms~2.5ms高电平占空比
 extern  u8  High_Low ;   // 在高电平输出时刻还是低电平输出时刻(0-高电平时刻，1-低电平时刻)
 u32 flag1=0;
 extern   u8 UploadCardNumber,DownloadCardNumber;
-
+extern u8 ReadedCard;//初始化读取到的卡号
 /** @addtogroup Template_Project
   * @{
   */
@@ -248,6 +248,12 @@ void USART1_IRQHandler(void)	//串口1中断服务程序
 			{
 				if(USART_RX_BUF_LINK[0]==0x4F && USART_RX_BUF_LINK[1]==0x4B )
 				{
+					if((Wifi_Flag==1)||(Wifi_Flag==3)||(Wifi_Flag==5))
+					{
+						Wifi_Flag=(Wifi_Flag+1);  //指令完成，进行下一步
+					}
+					
+/*					
 					if(Wifi_Flag==1)
 					{
 						Wifi_Flag=2;     //指令完成，进行下一步
@@ -260,10 +266,17 @@ void USART1_IRQHandler(void)	//串口1中断服务程序
 					{
 						Wifi_Flag=6;     //指令完成，进行下一步
 					}
+*/				
 				}
 				
 				if(USART_RX_BUF_LINK[0]==0x4F && USART_RX_BUF_LINK[1]==0x4E )
 				{
+					if((Wifi_Flag==1)||(Wifi_Flag==3)||(Wifi_Flag==5))
+					{
+						Wifi_Flag=(Wifi_Flag+1);  //指令完成，进行下一步
+					}
+					
+/*											
 					if(Wifi_Flag==1)
 					{
 						Wifi_Flag=2;     //指令完成，进行下一步
@@ -276,6 +289,7 @@ void USART1_IRQHandler(void)	//串口1中断服务程序
 					{
 						Wifi_Flag=6;     //指令完成，进行下一步
 					}
+*/
 				}
 				
 				//*********
@@ -345,22 +359,22 @@ void USART1_IRQHandler(void)	//串口1中断服务程序
 				counter_BUF=0;  //清计数
 				timeout=1;
 				
-					if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0xBB &&USART_RX_BUF[4]==0xCC &&USART_RX_BUF[5]==0xDD)
- 					{
-						Track = USART_RX_BUF[2];
-						FLAG =USART_RX_BUF[2]; 
-						printf("received %d %d %d %d  %d %d \n",USART_RX_BUF[0],USART_RX_BUF[1],USART_RX_BUF[2],USART_RX_BUF[3],USART_RX_BUF[4],USART_RX_BUF[5]);
+// 					if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0xBB &&USART_RX_BUF[4]==0xCC &&USART_RX_BUF[5]==0xDD)
+//  					{
+// 						Track = USART_RX_BUF[2];
+// 						FLAG =USART_RX_BUF[2]; 
+// 						printf("received %d %d %d %d  %d %d \n",USART_RX_BUF[0],USART_RX_BUF[1],USART_RX_BUF[2],USART_RX_BUF[3],USART_RX_BUF[4],USART_RX_BUF[5]);
 
-					}
+// 					}
 					
 					if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0x5A &&USART_RX_BUF[4]==0xA5 &&USART_RX_BUF[5]==0xA5) //装载和卸载位置通信
  					{
 						UploadCardNumber=USART_RX_BUF[2];
 						DownloadCardNumber=USART_RX_BUF[3];	
-         		FLAG=1;//AGV RUN			
+         		FLAG=1;                          //开始agv自动循迹功能			
 					//	USFlag=USART_RX_BUF[2];					
-            printf("received %d %d %d %d  %d %d \n",USART_RX_BUF[0],USART_RX_BUF[1],USART_RX_BUF[2],USART_RX_BUF[3],USART_RX_BUF[4],USART_RX_BUF[5]);
-
+            printf("received %02x %02x %02x %02x %02x %02x \n",USART_RX_BUF[0],USART_RX_BUF[1],USART_RX_BUF[2],USART_RX_BUF[3],USART_RX_BUF[4],USART_RX_BUF[5]);
+    
 					}
 					
 // 					//SysTick控制

@@ -158,30 +158,23 @@ void DuoJi(u8 jiaodu);
 
 
 int main(void)
-{ u32 LEDcounter=0,LEDFlag=0;
-	
-	
-	
-//  u32 AD_value;	  
-//	GPIO_InitTypeDef  GPIO_InitStructurer;	
-	
+{ 
+
  	USBCAN_GPIO_NoRemap();   // ½â·ÅPA11ºÍPA12
  	JTAGDisable_GPIO_NoRemap(); 	//½â·ÅPA15ºÍPB3ºÍPB4
-	BOOT1_ReleaseToGPIO();
-
+	BOOT1_ReleaseToGPIO();//½â·Åboot1¶Ë¿Ú
   /* ÅäÖÃÏµÍ³Ê±ÖÓÎª72M */      
   SystemInit();	
   /* ÅäÖÃ´®¿Ú */
   USART1_Config();
   /* ³õÊ¼»¯ADC1 */
 //  ADC1_Init();
-	/*³õÊ¼»¯×´Ì¬µÆ*/
+	/*³õÊ¼»¯×´Ì¬µÆ¶Ë¿Ú£¬ÏÖÒÑ¾­ÓÃÎª¶æ»úµÄ¿ØÖÆÒý½Å*/
 	LED_GPIO_Config();
 	/*³õÊ¼»¯ÊäÈë*/
 	ControlDI_AGV_GPIO_Config();
 	/*³õÊ¼»¯Êä³ö*/
-	ControlDO_AGV_GPIO_Config();
-	
+	ControlDO_AGV_GPIO_Config();	
 	/*³õÊ¼»¯PWM¿ØÖÆ*/
 	PWM_RCC_Configuration();
 	PWM_GPIO_Configuration();
@@ -192,28 +185,25 @@ int main(void)
 	ControlDOC_AGV_GPIO_Config();
 	NVIC_Configuration();
 	/*¶æ»ú³õÊ¼»¯ÉèÖÃ*/
-		HighSysTick =150;  //SysTick ¶æ»ú¿ØÖÆ£º20msÖÜÆÚ£¬0.5ms~2.5ms¸ßµçÆ½Õ¼¿Õ±È-------0¶È~180¶È(¸ßµçÆ½Ê±ÖÓ¿ØÖÆ)HighSysTick È¡Öµ50~250
-    LowSysTick =  2000-HighSysTick;  //SysTick ¶æ»ú¿ØÖÆ£º20msÖÜÆÚ£¬0.5ms~2.5ms¸ßµçÆ½Õ¼¿Õ±È-------0¶È~180¶È(µÍµçÆ½Ê±ÖÓ¿ØÖÆ)LowSysTick = 2000-HighSysTick£»
-    High_Low = 0; 
-			/* ÅäÖÃSysTick Îª10usÖÐ¶ÏÒ»´Î */
-		SysTick_Init();
+	HighSysTick =150;  //SysTick ¶æ»ú¿ØÖÆ£º20msÖÜÆÚ£¬0.5ms~2.5ms¸ßµçÆ½Õ¼¿Õ±È-------0¶È~180¶È(¸ßµçÆ½Ê±ÖÓ¿ØÖÆ)HighSysTick È¡Öµ50~250
+  LowSysTick =  2000-HighSysTick;  //SysTick ¶æ»ú¿ØÖÆ£º20msÖÜÆÚ£¬0.5ms~2.5ms¸ßµçÆ½Õ¼¿Õ±È-------0¶È~180¶È(µÍµçÆ½Ê±ÖÓ¿ØÖÆ)LowSysTick = 2000-HighSysTick£»
+  High_Low = 0; 
+  /* ÅäÖÃSysTick Îª10usÖÐ¶ÏÒ»´Î */
+	SysTick_Init();
 	
 	//GPIO_SetBits(GPIOB, GPIO_Pin_8);//led off
+  /*×ªÔËÆ¤´ø³õÊ¼»¯*/
 	MotoBelt(0);//0=Í£Ö¹£¬1=Õý×ª£¬2=·´×ª
 	USART_ITConfig(USART1, USART_IT_RXNE , ENABLE);		//USART1½ÓÊÕÖÐ¶ÏÊ¹ÄÜ
-		TIM3_NVIC_Configuration(); /* TIM3(ÖÐ¶ÏÓÅÏÈ¼¶) ¶¨Ê±ÅäÖÃ */
-    TIM3_Configuration(); 	 /* TIM3(³õÊ¼»¯) ¶¨Ê±ÅäÖÃ */
+	TIM3_NVIC_Configuration(); /* TIM3(ÖÐ¶ÏÓÅÏÈ¼¶) ¶¨Ê±ÅäÖÃ */
+  TIM3_Configuration(); 	 /* TIM3(³õÊ¼»¯) ¶¨Ê±ÅäÖÃ */
 	
 //  	printf("Uart init OK            \n");	
 	InitRc522();				//³õÊ¼»¯ÉäÆµ¿¨Ä£¿é
 	ReadedCard=0;//³õÊ¼»¯¶ÁÈ¡µ½µÄ¿¨ºÅ
-// 	printf("Rc522 init OK           \n");
-// 	
-//   printf("\r\n --------This is a ADC testing-----\r\n");
-//   printf("\r\n ------The ADC Pin is PA0 -----\r\n");
-// 	
-
-
+	
+	
+	
 // // TEST MOTOR CONVEYOR
 // while(1)
 // {
@@ -229,23 +219,6 @@ int main(void)
 // 	Delay(2000);
 // }
 
-
-// // // // // // 	//*************¶¨Ê±Æ÷²âÊÔ*********************
-// // // // // // 	START_TIME;	 /* TIM3 ¿ªÊ¼¼ÆÊ± */
-// // // // // // while(1)
-// // // // // // {
-
-// // // // // // 		
-// // // // // // 	 if ( T3time >= 500 ) /* 500ms Ê±¼äµ½ */
-// // // // // //     {
-// // // // // // 			STOP_TIME;   /* TIM3 Í£Ö¹¼ÆÊ± */
-// // // // // //       T3time = 0;				     
-// // // // // // 			printf("\r\n --------This is a Timer testing-----\r\n");
-// // // // // // 			START_TIME;	 /* TIM3 ¿ªÊ¼¼ÆÊ± */
-// // // // // //     } 
-
-// // // // // // }
-// // // // // // 	 //************¶¨Ê±Æ÷²âÊÔ**********************
 
 
 // //***********SysTick Testing*********************
@@ -263,15 +236,13 @@ int main(void)
 // 		SysTickCountFlag=0;
 // 		
 // 	}
-// 	
-// 	
 // 	}
-
-// //***********SysTick Testing*********************
+ //***********SysTick Testing*********************
 	
 	
 	Delay(5000);
-	
+	RFID[15]=0;
+  DuoJi(200);//¶æ»ú×ªµ½ÕÚµ²Î»Ö
 		while(1)
 	 { 
 
@@ -280,37 +251,72 @@ int main(void)
 				Wifi_Connect();
 			}						
 			while (espFlag)
-			{			
+			{					
+
+				//***********·Ö²¼²âÊÔ¹ý³Ì*********************
+// 				while(1)
+// 				{
+// 				AGVRun();	//Ð¡³µÐÐ½ø×ÔÎÒ¿ØÖÆ
+// 				RFIDReader();	//ÉäÆµ¿¨¼ì²â
+// 				}
+								
+				//***********·Ö²¼²âÊÔ¹ý³Ì*********************	
 			
-				UART1GetByte();//Ö¸Áî½ÓÊÕ
-				AGVRun();	//Ð¡³µÐÐ½ø×ÔÎÒ¿ØÖÆ
+				// UART1GetByte();//Ö¸Áî½ÓÊÕ
+				AGVRun();	//Ð¡³µÐÐ½ø×ÔÎÒ¿ØÖÆ													
 				if( (UploadCardNumber!=0) || (DownloadCardNumber!=0) )//½ÓÊÕµ½×°Ð¶ÔØÖ¸Áî
-				{
-					ReadedCard=RFIDReader();	//ÉäÆµ¿¨¼ì²â
-				
-					while((ReadedCard == UploadCardNumber)&&(UploadCardNumber!=0) && (DownloadCardNumber!=0))  //¶Áµ½¿¨Æ¬   get into Upload process   
+				{     			
+					if(RFID[15]==0)
+					{				
+						RFIDReader();	//ÉäÆµ¿¨¼ì²â
+					}
+					else if(RFID[15]!=0)
+						{ 
+							 ReadedCard =RFID[15];
+			  	  }
+					if((ReadedCard == UploadCardNumber)&&(UploadCardNumber!=0) && (DownloadCardNumber!=0))  //¶Áµ½¿¨Æ¬   get into Upload process   
 						{
-							FLAG=0;// AGV STOP
-							DuoJi(250);//¶æ»ú×ªµ½ÕÚµ²Î»ÖÃ	
-							Delay(5000);//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-							FLAG=1;//AGV RUN ½«Ë®Æ¿×°ÔØ
-              Delay(1500);//µÈ´ý×°ÔØÍê³É
-							DuoJi(150);	//¶æ»ú×ªµ½Í¨¹ýÎ»ÖÃ
-							Delay(5000);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-							PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È							
-							ReadedCard = 0;   //  get out Upload process	
-              UploadCardNumber=0;				
+							
+							//FLAG=0;// AGV STOP
+							motorQZ_control(TIM2,0,1,1);
+							 motorQY_control(TIM2,0,2,1);
+							 motorHZ_control(TIM2,0,3,1);
+							 motorHY_control(TIM2,0,4,1);
+							
+							DuoJi(240);//¶æ»ú×ªµ½ÕÚµ²Î»ÖÃ	
+							Delay(1000);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+						 motorQZ_control(TIM2,PWMPulseHigh,1,2);
+						 motorQY_control(TIM2,PWMPulseHigh,2,2);
+						 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+						 motorHY_control(TIM2,PWMPulseHigh,4,2);
+ 							//FLAG=1;//AGV RUN ½«Ë®Æ¿×°ÔØ
+                Delay(2000);//µÈ´ý×°ÔØÍê³É
+                DuoJi(200);	//¶æ»ú×ªµ½Í¨¹ýÎ»ÖÃ
+ 							Delay(1000);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+  							PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È			
+                RFID[15]=0;							
+  							ReadedCard = 0;   //  get out Upload process	
+                UploadCardNumber=0;				
 							printf("Upload finished");
 						}
 												
 				 while((ReadedCard==DownloadCardNumber) && (UploadCardNumber==0)&& (DownloadCardNumber!=0))
 					{												
-							FLAG=0;// AGV STOP
-							Delay(500);//µÈ´ýagvÍ£³µµ½Î»
+							//FLAG=0;// AGV STOP
+							 motorQZ_control(TIM2,0,1,1);
+							 motorQY_control(TIM2,0,2,1);
+							 motorHZ_control(TIM2,0,3,1);
+							 motorHY_control(TIM2,0,4,1);
 							MotoBelt(2);//Ð¶ÔØ 
-							Delay(3000);//µÈ´ýagvÐ¶ÔØµ½Î»
+							Delay(5000);//µÈ´ýagvÐ¶ÔØµ½Î»
+						   MotoBelt(0);//Ð¶ÔØ
+						  PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È	
 						//	FLAG=1;//AGV RUN
-						  PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È			
+						 motorQZ_control(TIM2,PWMPulseHigh,1,2);
+						 motorQY_control(TIM2,PWMPulseHigh,2,2);
+						 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+						 motorHY_control(TIM2,PWMPulseHigh,4,2);
+              RFID[15]=0;						
 							ReadedCard = 0;   //  get out Download process		
 							DownloadCardNumber=0;		
               printf("Download finished");
@@ -332,7 +338,7 @@ void DuoJi(u8 jiaodu)
 //Ð¡³µÐÐ½ø¿ØÖÆ
 void AGVRun(void)
 		{
-			    u8 testu8;
+			u8 testu8;
 			if(FLAG!=0)
 			{
 				testu8=InfraredDetection();//ºìÍâ¼ì²â°åÑ­¼£¼ì²â
@@ -348,7 +354,7 @@ void AGVRun(void)
 							 motorHZ_control(TIM2,0,3,1);
 							 motorHY_control(TIM2,0,4,1);
 					}
-					if(FLAG==1||testu8==1)
+					if(FLAG!=0&&testu8==1)
 				 { //printf("Rollback 1(1) ,Track= %d %d \n",Track,testu8);
 							 motorQZ_control(TIM2,PWMPulseHigh,1,3);
 						   motorQY_control(TIM2,PWMPulseHigh,2,3);
@@ -356,7 +362,7 @@ void AGVRun(void)
 						   motorHY_control(TIM2,PWMPulseHigh,4,3);
 				 }
 				
-					if(FLAG==2||testu8==2)
+					if(FLAG!=0&&testu8==2)
 					{// printf("Go along(2) ,Track= %d %d \n",Track,testu8);
 						 motorQZ_control(TIM2,PWMPulseHigh,1,2);
 						 motorQY_control(TIM2,PWMPulseHigh,2,2);
@@ -365,7 +371,7 @@ void AGVRun(void)
 					}
 						 
 						
-				if(FLAG==3||testu8==3)
+				if(FLAG!=0&&testu8==3)
 				{ //printf("Turn Left 1(3) ,Track= %d %d \n",Track,testu8);
 						motorQZ_control(TIM2,PWMPulseLow,1,2);
 						 motorQY_control(TIM2,PWMPulseLow,2,3);
@@ -377,7 +383,7 @@ void AGVRun(void)
 // 						 motorHZ_control(TIM2,0,3,4);
 // 						 motorHY_control(TIM2,0,4,4);
 				}
-				if(FLAG==4||testu8==4)
+				if(FLAG!=0&&testu8==4)
 				{	//printf("Turn Left 2(4) ,Track= %d %d \n",Track,testu8);	
 						  motorQZ_control(TIM2,PWMPulseMid1,1,2);
 						 motorQY_control(TIM2,PWMPulseMid1,2,3);
@@ -389,7 +395,7 @@ void AGVRun(void)
 // 						 motorHZ_control(TIM2,0,3,4);
 // 						 motorHY_control(TIM2,0,4,4);
 				}
-				if(FLAG==5||testu8==5)		 
+				if(FLAG!=0&&testu8==5)		 
 				{	//printf("Turn Left 3(5) ,Track= %d %d \n",Track,testu8);
 						motorQZ_control(TIM2,PWMPulseMid2,1,2);
 						 motorQY_control(TIM2,PWMPulseMid2,2,3);
@@ -401,7 +407,7 @@ void AGVRun(void)
 // 						 motorHZ_control(TIM2,0,3,4);
 // 						 motorHY_control(TIM2,0,4,4);
 				}
-				if(FLAG==6||testu8==6)
+				if(FLAG!=0&&testu8==6)
 				{	//printf("Turn Right 1(6) ,Track= %d %d \n",Track,testu8);
 							motorQZ_control(TIM2,PWMPulseLow,1,3);
 						 motorQY_control(TIM2,PWMPulseLow,2,2);
@@ -415,7 +421,7 @@ void AGVRun(void)
 					
 				
 				}
-				if(FLAG==7||testu8==7)
+				if(FLAG!=0&&testu8==7)
 				{	//printf("Turn Right 2(7) ,Track= %d %d \n",Track,testu8);	
 					
 					   motorQZ_control(TIM2,PWMPulseMid1,1,3);
@@ -429,7 +435,7 @@ void AGVRun(void)
 // 						 motorHY_control(TIM2,0,4,4);
 						
 				}
-				if(FLAG==8||testu8==8)
+				if(FLAG!=0&&testu8==8)
 				{	//printf("Turn Right 3(8) ,Track= %d %d \n",Track,testu8); 
 						
 					 motorQZ_control(TIM2,PWMPulseMid2,1,3);
@@ -443,7 +449,7 @@ void AGVRun(void)
 // 						 motorHY_control(TIM2,0,4,4);
 					
 				}
-				if(FLAG==9||testu8==9)
+				if(FLAG!=0&&testu8==9)
 				{//	printf("closely(9) ,Track= %d %d \n",Track,testu8);
 						 motorQZ_control(TIM2,0,1,4);
 						 motorQY_control(TIM2,0,2,4);
@@ -451,7 +457,7 @@ void AGVRun(void)
 						 motorHY_control(TIM2,0,4,4);
 				}
 
-				if(FLAG==10||testu8==10)
+				if(FLAG!=0&&testu8==10)
 				{ //printf("Estop(10) ,Track= %d %d \n",Track,testu8);
 						 motorQZ_control(TIM2,0,1,4);
 						 motorQY_control(TIM2,0,2,4);
@@ -546,7 +552,7 @@ u8 InfraredDetection(void)
 	//printf("\n distance = %d mV  \r\n",distance);
 // 		Delay(50);
 		
-	if( (!T1) && (!T2) && (!T3)&& (!T4)&& (!T5))//È«²¿±»ÕÚµ²Ê±,ÈÏÎª½øÈë¼õËÙ´ø£¬×¼±¸RFID¼ì²â
+	if( (!T1) && (!T2) && (!T3)&& (!T4)&& (!T5)&&((UploadCardNumber!=0) || (DownloadCardNumber!=0)))//È«²¿±»ÕÚµ²Ê±,ÈÏÎª½øÈë¼õËÙ´ø£¬×¼±¸RFID¼ì²â
 	{
 
 				PWMPulseHigh=60;
@@ -692,8 +698,6 @@ void  Wifi_Connect(void)
 		
 /*****ÒÔÉÏÎªWifiÁ´½Ó²Ù×÷*********/	
 
-
-	
 u8 RFIDReader(void)
 {
 	unsigned char status;
@@ -705,7 +709,7 @@ u8 RFIDReader(void)
 		case RFID_NO :    status = PcdRequest(PICC_REQALL,CT);/*Œ¤¿¨*/
 											if (status==MI_OK)
 											{
-												printf("aaa");		 
+														 
 												RFID_status = RFID_XunKa_OK;
 												
 												status=MI_ERR;
@@ -714,7 +718,7 @@ u8 RFIDReader(void)
 		case RFID_XunKa_OK: 			
 												if (status==MI_OK)//·ÀÐn×²
 												{      
-                             													
+                         													
 													RFID_status = RFID_FangChongZhuang_OK ;
 													status=MI_ERR;
 													status =PcdSelect(SN);//ßx¿¨	
@@ -723,7 +727,7 @@ u8 RFIDReader(void)
 	case RFID_FangChongZhuang_OK: 
 																if (status==MI_OK)
 																{  
-                            																
+                            															
 																	RFID_status = RFID_XuanKa_OK  ;
 																	status=MI_ERR;
 																	status =PcdAuthState(0x60,0x09,KEY,SN);//òž×C
@@ -732,7 +736,7 @@ u8 RFIDReader(void)
 	case 	RFID_XuanKa_OK:		
 													if (status==MI_OK)
 													{         
-														 	
+														
 														RFID_status = RFID_YanZheng_OK   ;
 														status=MI_ERR;
 														status=PcdRead(s,RFID); //¶Á¿¨
@@ -742,20 +746,16 @@ u8 RFIDReader(void)
 	case RFID_YanZheng_OK:				
 																if (status==MI_OK)
 																{  
-																	if(USFlag !=0)
-																	{
-																		 CardNumber=RFID[15]; 
-																		 printf("READ_MI_OK the %d area data is  %02x  \n",s,RFID[15]);										
-																		 RFID[15]=0;
-																		 motorQZ_control(TIM2,0,1,4);
-																		 motorQY_control(TIM2,0,2,4);
-																		 motorHZ_control(TIM2,0,3,4);
-																		 motorHY_control(TIM2,0,4,4);	
-									//									 RFID_SN_Control();
-						
-																	}
-														 
-                 //                      PWMPulseHigh=80;																	
+
+																		CardNumber=RFID[15]; 
+																		printf("READ_Card the %d area data is  %02x  \n",s,CardNumber);										
+// 																		RFID[15]=0;
+ 																		//FLAG=0;
+// 																		 motorQZ_control(TIM2,0,1,4);
+// 																		 motorQY_control(TIM2,0,2,4);
+// 																		 motorHZ_control(TIM2,0,3,4);
+// 																		 motorHY_control(TIM2,0,4,4);	
+ //                      PWMPulseHigh=80;																	
 																	RFID_status = RFID_DuKa_OK   ;																	
 																	status=MI_ERR;
 																

@@ -146,12 +146,7 @@ void motor_control(void)  //初始化电机控制
 		TIM_SetCompare1(TIM2, 0);
 		TIM_SetCompare2(TIM2, 0);
 		TIM_SetCompare3(TIM2, 0);
-		TIM_SetCompare4(TIM2, 0);
-// 		TIM_SetCompare1(TIM3, 20);
-// 		TIM_SetCompare2(TIM3, 40);
-// 		TIM_SetCompare3(TIM3, 60);
-// 		TIM_SetCompare4(TIM3, 80);
-	
+		TIM_SetCompare4(TIM2, 0);	
 }
 //前左电机控制
 void motorQZ_control(TIM_TypeDef* TMM , uint16_t PWMPulse, u8 Channel, u8 Cmd)
