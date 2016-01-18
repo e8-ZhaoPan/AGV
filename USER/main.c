@@ -278,50 +278,58 @@ int main(void)
 						{
 							
 							//FLAG=0;// AGV STOP
-							motorQZ_control(TIM2,0,1,1);
+							 motorQZ_control(TIM2,0,1,1);
 							 motorQY_control(TIM2,0,2,1);
 							 motorHZ_control(TIM2,0,3,1);
-							 motorHY_control(TIM2,0,4,1);
-							
-							DuoJi(240);//舵机转到遮挡位置	
-							Delay(1000);	//等待舵机转动到位
-						 motorQZ_control(TIM2,PWMPulseHigh,1,2);
-						 motorQY_control(TIM2,PWMPulseHigh,2,2);
-						 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-						 motorHY_control(TIM2,PWMPulseHigh,4,2);
+							 motorHY_control(TIM2,0,4,1);							
+							 DuoJi(240);//舵机转到遮挡位置	
+							 Delay(1000);	//等待舵机转动到位
+							 motorQZ_control(TIM2,PWMPulseHigh,1,2);
+							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+							 motorHY_control(TIM2,PWMPulseHigh,4,2);
  							//FLAG=1;//AGV RUN 将水瓶装载
-                Delay(2000);//等待装载完成
-                DuoJi(200);	//舵机转到通过位置
- 							Delay(1000);	//等待舵机转动到位
-  							PWMPulseHigh=80;//恢复agv行进速度			
-                RFID[15]=0;							
-  							ReadedCard = 0;   //  get out Upload process	
-                UploadCardNumber=0;				
-							printf("Upload finished");
+               Delay(2000);//等待装载完成
+               DuoJi(200);	//舵机转到通过位置
+ 							 Delay(1000);	//等待舵机转动到位
+  						 PWMPulseHigh=80;//恢复agv行进速度			
+               RFID[15]=0;							
+  						 ReadedCard = 0;   //  get out Upload process	
+               UploadCardNumber=0;				
+							 printf("Upload finished");
 						}
+						
+			
 												
-				 while((ReadedCard==DownloadCardNumber) && (UploadCardNumber==0)&& (DownloadCardNumber!=0))
+				 if((ReadedCard==DownloadCardNumber) && (UploadCardNumber==0)&& (DownloadCardNumber!=0))
 					{												
 							//FLAG=0;// AGV STOP
 							 motorQZ_control(TIM2,0,1,1);
 							 motorQY_control(TIM2,0,2,1);
 							 motorHZ_control(TIM2,0,3,1);
 							 motorHY_control(TIM2,0,4,1);
-							MotoBelt(2);//卸载 
-							Delay(5000);//等待agv卸载到位
+							 MotoBelt(2);//卸载 
+							 Delay(5000);//等待agv卸载到位
 						   MotoBelt(0);//卸载
-						  PWMPulseHigh=80;//恢复agv行进速度	
-						//	FLAG=1;//AGV RUN
-						 motorQZ_control(TIM2,PWMPulseHigh,1,2);
-						 motorQY_control(TIM2,PWMPulseHigh,2,2);
-						 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-						 motorHY_control(TIM2,PWMPulseHigh,4,2);
-              RFID[15]=0;						
-							ReadedCard = 0;   //  get out Download process		
-							DownloadCardNumber=0;		
-              printf("Download finished");
-					}	
-				
+						   PWMPulseHigh=80;//恢复agv行进速度	
+						  //FLAG=1;//AGV RUN
+							 motorQZ_control(TIM2,PWMPulseHigh,1,2);
+							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+							 motorHY_control(TIM2,PWMPulseHigh,4,2);
+							 RFID[15]=0;						
+							 ReadedCard = 0;   //  get out Download process		
+							 DownloadCardNumber=0;		
+							 printf("Download finished");
+					}
+					if((ReadedCard==DownloadCardNumber) && (UploadCardNumber!=0))//如果读到卸载卡片，但是还未装载，那么就恢复agv速度
+					{
+		        RFID[15]=0;	
+						   ReadedCard = 0;   //  get out Download process									 
+							 PWMPulseHigh=80;//恢复agv行进速度	
+
+					}
+			
 				}
 		  }
 	}
