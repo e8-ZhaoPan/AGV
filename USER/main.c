@@ -338,6 +338,7 @@ int main(void)
 //舵機角度控制 50-250之間設置，對應0-180度  
 void DuoJi(u8 jiaodu)
 {
+	 High_Low = 0;
 	 HighSysTick=jiaodu;   
 	 SysTick->CTRL |= 0x00000003; 
 }
