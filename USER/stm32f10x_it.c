@@ -190,13 +190,13 @@ void SysTick_Handler(void)
 		
 //***********SysTick Testing*********************	
 	
-	if(flag1==30000)
-	{
-		flag1=0; 
-		GPIO_ResetBits(GPIOB,GPIO_Pin_8);  //低电平结束         
-		SysTick->CTRL &= 0xFFFFFFFC;  
-		
-  }
+// 	if(flag1==300000)
+// 	{
+// 		flag1=0; 
+// 	//	GPIO_ResetBits(GPIOB,GPIO_Pin_8);  //低电平结束         
+// 		SysTick->CTRL &= 0xFFFFFFFC;  
+// 		
+//   }
 	
 	
 }
