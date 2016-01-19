@@ -24,7 +24,7 @@ I (rc522.h)(0x568DBFF0)
 I (stm32f10x_it.h)(0x49D96964)
 I (Time_test.h)(0x568E09CE)
 I (SysTick.h)(0x569328EA)
-F (.\stm32f10x_it.c)(0x569DCD16)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\stm32f10x_it.o" --omf_browse "..\Output\stm32f10x_it.crf" --depend "..\Output\stm32f10x_it.d")
+F (.\stm32f10x_it.c)(0x569DDA1B)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\stm32f10x_it.o" --omf_browse "..\Output\stm32f10x_it.crf" --depend "..\Output\stm32f10x_it.d")
 I (stm32f10x_it.h)(0x49D96964)
 I (..\CMSIS\stm32f10x.h)(0x56984C88)
 I (..\CMSIS\core_cm3.h)(0x56976097)
