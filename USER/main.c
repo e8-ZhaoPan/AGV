@@ -154,7 +154,7 @@ void TIM3_Configuration(void);
 void BOOT1_ReleaseToGPIO(void);
 void RFID_SN_Control(void);
 void AGVRun(void);
-void DuoJi(u8 jiaodu);
+void DuoJi(u16 jiaodu);
 
 
 int main(void)
@@ -242,7 +242,7 @@ int main(void)
 	
 	Delay(5000);
 	RFID[15]=0;
-  DuoJi(200);//¶æ»ú×ªµ½ÕÚµ²Î»Ö
+  DuoJi(300);//¶æ»ú×ªµ½ÕÚµ²Î»Ö
 		while(1)
 	 { 
 
@@ -252,7 +252,7 @@ int main(void)
 			}						
 			while (espFlag)
 			{					
-
+				
 				//***********·Ö²¼²âÊÔ¹ý³Ì*********************
 // 				while(1)
 // 				{
@@ -273,24 +273,27 @@ int main(void)
 					else if(RFID[15]!=0)
 						{ 
 							 ReadedCard =RFID[15];
+							 
 			  	  }
 					if((ReadedCard == UploadCardNumber)&&(UploadCardNumber!=0) && (DownloadCardNumber!=0))  //¶Áµ½¿¨Æ¬   get into Upload process   
 						{
-							
+							PWMPulseHigh=65;//»Ö¸´agvÐÐ½øËÙ¶È	
 							//FLAG=0;// AGV STOP
 							 motorQZ_control(TIM2,0,1,1);
 							 motorQY_control(TIM2,0,2,1);
 							 motorHZ_control(TIM2,0,3,1);
 							 motorHY_control(TIM2,0,4,1);							
-							 DuoJi(240);//¶æ»ú×ªµ½ÕÚµ²Î»ÖÃ	
+							 DuoJi(300);//¶æ»ú×ªµ½ÕÚµ²Î»ÖÃ	
 							 Delay(1000);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);
 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
 							 motorHY_control(TIM2,PWMPulseHigh,4,2);
+							 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+							 PWMPulseHigh=60;//»Ö¸´agvÐÐ½øËÙ¶È
  							//FLAG=1;//AGV RUN ½«Ë®Æ¿×°ÔØ
-               Delay(2000);//µÈ´ý×°ÔØÍê³É
-               DuoJi(200);	//¶æ»ú×ªµ½Í¨¹ýÎ»ÖÃ
+               Delay(1000);//µÈ´ý×°ÔØÍê³É
+               DuoJi(180);	//¶æ»ú×ªµ½Í¨¹ýÎ»ÖÃ
  							 Delay(1000);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
   						 PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È			
                RFID[15]=0;							
@@ -336,8 +339,9 @@ int main(void)
 }
 
 //¶æ™C½Ç¶È¿ØÖÆ 50-250Ö®égÔOÖÃ£¬Œ¦‘ª0-180¶È  
-void DuoJi(u8 jiaodu)
+void DuoJi(u16 jiaodu)
 {
+// 	 High_Low = 0;
 	 HighSysTick=jiaodu;   
 	 SysTick->CTRL |= 0x00000003; 
 }
@@ -701,6 +705,8 @@ void  Wifi_Connect(void)
 			espFlag=1;
 			Wifi_Touchuan=1;
 			printf("WIFI connected");
+			DuoJi(180);//¶æ»ú×ªµ½ÕÚµ²Î»Ö
+			Delay(5000);
 		}
 	}
 		

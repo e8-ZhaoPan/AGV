@@ -190,13 +190,13 @@ void SysTick_Handler(void)
 		
 //***********SysTick Testing*********************	
 	
-	if(flag1==30000)
-	{
-		flag1=0; 
-		//GPIO_ResetBits(GPIOB,GPIO_Pin_8);  //低电平结束         
-		SysTick->CTRL &= 0xFFFFFFFC;  
-		
-  }
+// 	if(flag1==300000)
+// 	{
+// 		flag1=0; 
+// 	//	GPIO_ResetBits(GPIOB,GPIO_Pin_8);  //低电平结束         
+// 		SysTick->CTRL &= 0xFFFFFFFC;  
+// 		
+//   }
 	
 	
 }
@@ -359,13 +359,7 @@ void USART1_IRQHandler(void)	//串口1中断服务程序
 				counter_BUF=0;  //清计数
 				timeout=1;
 				
-// 					if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0xBB &&USART_RX_BUF[4]==0xCC &&USART_RX_BUF[5]==0xDD)
-//  					{
-// 						Track = USART_RX_BUF[2];
-// 						FLAG =USART_RX_BUF[2]; 
-// 						printf("received %d %d %d %d  %d %d \n",USART_RX_BUF[0],USART_RX_BUF[1],USART_RX_BUF[2],USART_RX_BUF[3],USART_RX_BUF[4],USART_RX_BUF[5]);
 
-// 					}
 					
 					if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0x5A &&USART_RX_BUF[4]==0xA5 &&USART_RX_BUF[5]==0xA5) //装载和卸载位置通信
  					{
