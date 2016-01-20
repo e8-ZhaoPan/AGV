@@ -181,7 +181,7 @@ void SysTick_Handler(void)
 	
 	if(  (High_Low==1) && (SysTickCountFlag==(2000-HighSysTick)))
 	{
-// // 		SysTick->CTRL &= 0xFFFFFFFC;          //暂时关闭SysTick时钟中断请求开启,暂时关闭SysTick定时器使能
+ 		//SysTick->CTRL &= 0xFFFFFFFC;          //暂时关闭SysTick时钟中断请求开启,暂时关闭SysTick定时器使能
 		GPIO_SetBits(GPIOB,GPIO_Pin_8);  //低电平结束
 		SysTickCountFlag=0;
 		High_Low=0 ;  //进入下一个阶段
@@ -190,13 +190,13 @@ void SysTick_Handler(void)
 		
 //***********SysTick Testing*********************	
 	
-// 	if(flag1==300000)
-// 	{
-// 		flag1=0; 
-// 	//	GPIO_ResetBits(GPIOB,GPIO_Pin_8);  //低电平结束         
-// 		SysTick->CTRL &= 0xFFFFFFFC;  
-// 		
-//   }
+	if(flag1==300000)
+	{
+		flag1=0; 
+	//	GPIO_ResetBits(GPIOB,GPIO_Pin_8);  //低电平结束         
+		SysTick->CTRL &= 0xFFFFFFFC;  
+		
+  }
 	
 	
 }

@@ -277,25 +277,249 @@ int main(void)
 			  	  }
 					if((ReadedCard == UploadCardNumber)&&(UploadCardNumber!=0) && (DownloadCardNumber!=0))  //¶Áµ½¿¨Æ¬   get into Upload process   
 						{
-							PWMPulseHigh=65;//»Ö¸´agvÐÐ½øËÙ¶È	
+							PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È	
 							//FLAG=0;// AGV STOP
-							 motorQZ_control(TIM2,0,1,1);
+							 motorQZ_control(TIM2,0,1,1);//stop
 							 motorQY_control(TIM2,0,2,1);
 							 motorHZ_control(TIM2,0,3,1);
-							 motorHY_control(TIM2,0,4,1);							
+							 motorHY_control(TIM2,0,4,1);		
+ Delay(500);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»							
 							 DuoJi(300);//¶æ»ú×ªµ½ÕÚµ²Î»ÖÃ	
 							 Delay(1000);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-							 motorQZ_control(TIM2,PWMPulseHigh,1,2);
+							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-							 motorHY_control(TIM2,PWMPulseHigh,4,2);
-							 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-							 PWMPulseHigh=60;//»Ö¸´agvÐÐ½øËÙ¶È
+							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+							 Delay(300);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+							 motorQZ_control(TIM2,0,1,1);//stop
+							 motorQY_control(TIM2,0,2,1);
+							 motorHZ_control(TIM2,0,3,1);
+							 motorHY_control(TIM2,0,4,1);			
+							 Delay(500);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+							 motorQZ_control(TIM2,PWMPulseHigh,1,3);//back
+						   motorQY_control(TIM2,PWMPulseHigh,2,3);
+						   motorHZ_control(TIM2,PWMPulseHigh,3,3);
+						   motorHY_control(TIM2,PWMPulseHigh,4,3);
+							 Delay(200);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+							 motorQZ_control(TIM2,0,1,1);//stop
+							 motorQY_control(TIM2,0,2,1);
+							 motorHZ_control(TIM2,0,3,1);
+							 motorHY_control(TIM2,0,4,1);	
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							  Delay(30);
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);	
+// 	              Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»							 
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);							
+// 								 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);	
+// 							 	 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);
+// 						 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);
+// 								 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);
+// 						   Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);
+// 						 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);
+// 							 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);
+// 							 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);
+// 					     Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);
+// 							 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);
+// 							 					   Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);
+// 						 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);
+// 							 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 					   Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);
+// 						 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);
+// 							 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 					   Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);
+// 						 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);
+// 							 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 					   Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);
+// 						   Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
+// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
+// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
+// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
+// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+// 							 motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQY_control(TIM2,0,2,1);
+// 							 motorHZ_control(TIM2,0,3,1);
+// 							 motorHY_control(TIM2,0,4,1);
+							 //Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+							 //PWMPulseHigh=60;//»Ö¸´agvÐÐ½øËÙ¶È
  							//FLAG=1;//AGV RUN ½«Ë®Æ¿×°ÔØ
-               Delay(1000);//µÈ´ý×°ÔØÍê³É
-               DuoJi(180);	//¶æ»ú×ªµ½Í¨¹ýÎ»ÖÃ
- 							 Delay(1000);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-  						 PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È			
+               //Delay(1000);//µÈ´ý×°ÔØÍê³É
+              // DuoJi(180);	//¶æ»ú×ªµ½Í¨¹ýÎ»ÖÃ
+							Delay(500);//µÈ´ýagvÐ¶ÔØµ½Î»
+							 DuoJi(220);	//¶æ»ú×ªµ½Í¨¹ýÎ»ÖÃ
+							 MotoBelt(1);//Ð¶ÔØ 
+							 Delay(500);//µÈ´ýagvÐ¶ÔØµ½Î»
+						   MotoBelt(0);//Ð¶ÔØ
+ 							 Delay(700);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+  						 //PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È			
                RFID[15]=0;							
   						 ReadedCard = 0;   //  get out Upload process	
                UploadCardNumber=0;				
@@ -705,7 +929,7 @@ void  Wifi_Connect(void)
 			espFlag=1;
 			Wifi_Touchuan=1;
 			printf("WIFI connected");
-			DuoJi(180);//¶æ»ú×ªµ½ÕÚµ²Î»Ö
+			DuoJi(220);//¶æ»ú×ªµ½ÕÚµ²Î»Ö
 			Delay(5000);
 		}
 	}

@@ -1,7 +1,7 @@
 ..\Output\agv_pwm.o: AGV_pwm.c
 ..\Output\agv_pwm.o: ..\CMSIS\stm32f10x.h
 ..\Output\agv_pwm.o: ..\CMSIS\core_cm3.h
-..\Output\agv_pwm.o: C:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+..\Output\agv_pwm.o: C:\Keil ARM\ARM\ARMCC\bin\..\include\stdint.h
 ..\Output\agv_pwm.o: ..\CMSIS\system_stm32f10x.h
 ..\Output\agv_pwm.o: ..\USER\stm32f10x_conf.h
 ..\Output\agv_pwm.o: ..\FWlib\inc\stm32f10x_adc.h
