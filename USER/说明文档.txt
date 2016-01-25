@@ -5,7 +5,7 @@
 通信指令记录：
 1：通信指令为6个字节[0]-[5]    AA 5A 01 02 A5 A5
 2：if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0x5A &&USART_RX_BUF[4]==0xA5 &&USART_RX_BUF[5]==0xA5) //下发rfid card卡号，在此卡位置装载或者是卸载
-   [2]=装载卡号；      [3]=卸载卡号
+   [2]=装载卡号；(A、B、C、D、E.....)      [3]=卸载卡号：(1、2、3、4、5……)
    
  方法说明：
  1：u8 RFIDReader(void)   返回值CardNumber = rfid[15];
@@ -13,4 +13,12 @@
 整体流程完成。
 待解决问题：非待机位置接收指令后，寻到卡后对卡片的验证和去除。
 
+
+3、（下发一次数据装载下载次数，增加STM32的缓存机制，队列最大容纳80个任务。每次接收指令之后回复当前队列的任务数量。-此功能在上位实现）
  				
+4、协议扩充：
+(1)WIFI connected:      BB 5B 00 00 B1 B5 
+(2)received CMD:        BB 5B 01 02 B2 B5 (01 02是举例的取货放货位置)
+(2)Upload finished:     BB 5B 01 02 B3 B5 (01 02是举例的取货放货位置)
+(3)Download finished:   BB 5B 01 02 B4 B5 (01 02是举例的取货放货位置)
+(5)Disconnected server: BB 5B 00 00 B5 B5 
