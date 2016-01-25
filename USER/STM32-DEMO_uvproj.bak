@@ -451,6 +451,11 @@
               <FileType>1</FileType>
               <FilePath>.\Time_test.c</FilePath>
             </File>
+            <File>
+              <FileName>说明文档.txt</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\说明文档.txt</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

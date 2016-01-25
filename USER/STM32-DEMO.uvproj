@@ -451,11 +451,6 @@
               <FileType>1</FileType>
               <FilePath>.\Time_test.c</FilePath>
             </File>
-            <File>
-              <FileName>说明文档.txt</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\说明文档.txt</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -525,6 +520,16 @@
               <FileName>system_stm32f10x.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\CMSIS\system_stm32f10x.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Document</GroupName>
+          <Files>
+            <File>
+              <FileName>说明文档.txt</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\说明文档.txt</FilePath>
             </File>
           </Files>
         </Group>

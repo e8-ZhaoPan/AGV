@@ -22,4 +22,12 @@
 (5)Disconnected server: BB 5B 00 00 B5 B5 
 (5)Readed card number:  BB 5B 01 00 B6 B5 (01 是举例的读到的卡号)
 
+
+3、（下发一次数据装载下载次数，增加STM32的缓存机制，队列最大容纳80个任务。每次接收指令之后回复当前队列的任务数量。-此功能在上位实现）
  				
+4、协议扩充：
+(1)WIFI connected:      BB 5B 00 00 B1 B5 
+(2)received CMD:        BB 5B 01 02 B2 B5 (01 02是举例的取货放货位置)
+(2)Upload finished:     BB 5B 01 02 B3 B5 (01 02是举例的取货放货位置)
+(3)Download finished:   BB 5B 01 02 B4 B5 (01 02是举例的取货放货位置)
+(5)Disconnected server: BB 5B 00 00 B5 B5 
