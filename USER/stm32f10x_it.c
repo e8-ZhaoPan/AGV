@@ -38,8 +38,7 @@ extern  u8 Wifi_Touchuan; //透传标志
 extern	u8 USART_RX_BUF_LINK[64];     //LinkWifi时候接收缓冲,最大64个字节.
 extern  u8 WifiStartR;
 extern  volatile u32 T3time; // ms 计时变量  'volatile' 是定义易变变量，需要程序每次扫描都要读取内部的真实数据
-extern  u8 qiaoshuo;
-extern  u8 zhaopan;
+extern  u8 TouYanZheng;
 extern  u8 timeout;//用于接收超时判断
 extern  u32 SysTickCountFlag ;  //SysTick中断计数
 extern  u32 SysTickCountFlag_1_0ms;  //SysTick中断1ms计数
@@ -50,6 +49,7 @@ extern  u32 HighSysTick ;  //SysTick 舵机控制：20ms周期，0.5ms~2.5ms高电平占空比
 extern  u32 LowSysTick  ;  //SysTick 舵机控制：20ms周期，0.5ms~2.5ms高电平占空比-------0度~180度(低电平时钟控制)LowSysTick = 2000-HighSysTick；
 extern  u8  High_Low ;   // 在高电平输出时刻还是低电平输出时刻(0-高电平时刻，1-低电平时刻)
 u32 flag1=0;
+extern u8 Standby;
 extern   u8 UploadCardNumber,DownloadCardNumber;
 extern u8 ReadedCard;//初始化读取到的卡号
 /** @addtogroup Template_Project
@@ -346,10 +346,10 @@ void USART1_IRQHandler(void)	//串口1中断服务程序
 		if(saveBUF==0xAA)
 		{
 			START_TIME;	 /* TIM3 开始计时 */
-		  zhaopan=1;	 
+		  TouYanZheng=1;	 
 		  timeout=0;
 		}
-		if(zhaopan==1)
+		if(TouYanZheng==1)
 		{
 			USART_RX_BUF[counter_BUF]= saveBUF;
 			counter_BUF++;
@@ -363,12 +363,13 @@ void USART1_IRQHandler(void)	//串口1中断服务程序
 					
 					if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0x5A &&USART_RX_BUF[4]==0xA5 &&USART_RX_BUF[5]==0xA5) //装载和卸载位置通信
  					{
-						UploadCardNumber=USART_RX_BUF[2];
-						DownloadCardNumber=USART_RX_BUF[3];	
-         		FLAG=1;                          //开始agv自动循迹功能			
-					//	USFlag=USART_RX_BUF[2];					
-            printf("received %02x %02x %02x %02x %02x %02x \n",USART_RX_BUF[0],USART_RX_BUF[1],USART_RX_BUF[2],USART_RX_BUF[3],USART_RX_BUF[4],USART_RX_BUF[5]);
-    
+
+						UploadCardNumber = USART_RX_BUF[2];//转换为十进制
+						DownloadCardNumber = USART_RX_BUF[3];//转换为十进制	
+         		FLAG=1;                          //开始agv自动循迹功能		
+            Standby = 0;						
+					 //	USFlag=USART_RX_BUF[2];					
+            printf("%d %d %d %d %d %d \n", 0xBB, 0x5B,USART_RX_BUF[2],USART_RX_BUF[3], 0xB2, 0xB5);
 					}
 					
 // 					//SysTick控制
@@ -401,9 +402,7 @@ void USART1_IRQHandler(void)	//串口1中断服务程序
 // 						}
 // 					}
 					
-					
-					
-					
+				
 					for(icfor=0;icfor<=5;icfor++)
 					{
 						USART_RX_BUF[icfor]=0;
@@ -415,10 +414,8 @@ void USART1_IRQHandler(void)	//串口1中断服务程序
 				
 				//printf("received %d \n",USART_RX_BUF[counter_BUF]);
 				
-				
 				saveBUF_LINK=0; //来一次清一次
-			}
-			
+			}			
 		}
 	}
 
@@ -448,7 +445,7 @@ void TIM3_IRQHandler(void)
 					{
 						USART_RX_BUF[i]=0;
 					}
-				zhaopan=0;
+				TouYanZheng=0;
 				counter_BUF=0;  //清计数	
 			} 
 			

@@ -46,20 +46,19 @@ PA4¡¢5¡¢6¡¢7£ºSPI1_NSS¡¢SPI1_SCK¡¢SPI1_MISO¡¢SPI1_MOSI
 unsigned char CT[20];//¿¨ÀàÐÍ
 unsigned char SN[4]; //¿¨ºÅ
 unsigned char RFID[16];			//´æ·ÅRFID 
-unsigned char RFIDWrite[16]={0x00,0x00,0x00,0x00,0x00,0x00,0xff,0x07,0x80,0x29,0xff,0xff,0xff,0xff,0xff,0x01};			//RFID writedata 
-unsigned char lxl_bit=0;
-unsigned char card1_bit=0;
-unsigned char card2_bit=0;
-unsigned char card3_bit=0;
-unsigned char card4_bit=0;
-unsigned char total=0;
-unsigned char lxl[4]={6,109,250,186};
-unsigned char card_1[4]={66,193,88,0};
-unsigned char card_2[4]={66,191,104,0};
-unsigned char card_3[4]={62,84,28,11};
-unsigned char card_4[4]={126,252,248,12};
+unsigned char RFIDWrite[16]={0x00,0x00,0x00,0x00,0x00,0x00,0xff,0x07,0x80,0x29,0xff,0xff,0xff,0xff,0xff,0x0A};			//RFID writedata 
+// unsigned char card1_bit=0;
+// unsigned char card2_bit=0;
+// unsigned char card3_bit=0;
+// unsigned char card4_bit=0;
+//unsigned char total=0;
+//unsigned char lxl[4]={6,109,250,186};
+// unsigned char card_1[4]={66,193,88,0};
+// unsigned char card_2[4]={66,191,104,0};
+// unsigned char card_3[4]={62,84,28,11};
+// unsigned char card_4[4]={126,252,248,12};
 u8 KEY[6]={0xff,0xff,0xff,0xff,0xff,0xff};
-unsigned char RFID1[16]={0x00,0x00,0x00,0x00,0x00,0x00,0xff,0x07,0x80,0x29,0xff,0xff,0xff,0xff,0xff,0x01};
+//unsigned char RFID1[16]={0x00,0x00,0x00,0x00,0x00,0x00,0xff,0x07,0x80,0x29,0xff,0xff,0xff,0xff,0xff,0x01};
 unsigned char senddata1[]={0x41 ,0x54 ,0x2B ,0x43 ,0x49 ,0x50 ,0x53 ,0x54 ,0x41 ,0x52 ,0x54 ,0x3D ,0x22 ,
 	                         0x54 ,0x43 ,0x50 ,0x22 ,0x2C ,0x22 ,0x31 ,0x30 ,0x2E ,0x30 ,0x2E ,0x31 ,0x2E ,
                            0x31,0X37 ,0x22 ,0x2C ,0x38 ,0x30 ,0x0D ,0x0A };  //10.0.1.17:80
@@ -81,13 +80,13 @@ volatile u32 T3time=0; // ms ¼ÆÊ±±äÁ¿
   u8 Wifi_Flag=0;
 	u8 Wifi_Touchuan=0; //Í¸´«±êÖ¾
   u8 WifiStartR=0;
-  u8 UploadCardNumber=0,DownloadCardNumber=0;//Í¨ÐÅÖ¸ÁîÖ¸Áîagv×°ÔØÎ»ÖÃºÍÐ¶ÔØÎ»ÖÃ
+  u8 UploadCardNumber=0,DownloadCardNumber=0,Standby=0;//Í¨ÐÅÖ¸ÁîÖ¸Áîagv×°ÔØÎ»ÖÃ¡¢Ð¶ÔØÎ»ÖÃ¡¢´ý»úÎ»ÖÃ
 
 //bool T1,T2,T3,T4,T5,clp;  //ÊäÈëDI±äÁ¿
 u8 Track; 	 //ÐÐ¶¯Â·Ïß
 u8 FLAG;//Í¨¹ý·ÇÑ­¼£·½Ê½¿ØÖÆagvÐÐ×ß
-u8 qiaoshuo=0;
-u8 zhaopan=0;//ÏÞÊ±½ÓÊÕ£¬ÔÚ¹æ¶¨Ê±¼äÄÚ½ÓÊÕ²»ÍêÕûÔòÅ×Æú½ÓÊÕÄÚÈÝ
+
+u8 TouYanZheng=0;//Í¨ÐÅÖ¸ÁîÍ·ÑéÖ¤£¬Èç¹ûÍ·ÑéÖ¤Í¨¹ý£¬Ôò¿ªÊ¼½ÓÊÕÖ¸Áî ÏÞÊ±½ÓÊÕ£¬ÔÚ¹æ¶¨Ê±¼äÄÚ½ÓÊÕ²»ÍêÕûÔòÅ×Æú½ÓÊÕÄÚÈÝ
 u8 timeout=0;//ÓÃÓÚ½ÓÊÕ³¬Ê±ÅÐ¶Ï
 u32 SysTickCountFlag =0;  //SysTickÖÐ¶Ï¼ÆÊý
 u32 SysTickCountFlag_1_0ms =(1000*100);  //SysTickÖÐ¶Ï1ms¼ÆÊý
@@ -148,7 +147,7 @@ u8  InfraredDetection(void);
 void USART1_IRQHandler(void);
 unsigned char UART1GetByte(void);
 void NVIC_Configuration(void);
-void  Wifi_Connect(void);
+void Wifi_Connect(void);
 void TIM3_NVIC_Configuration(void);
 void TIM3_Configuration(void);
 void BOOT1_ReleaseToGPIO(void);
@@ -201,7 +200,7 @@ int main(void)
 //  	printf("Uart init OK            \n");	
 	InitRc522();				//³õÊ¼»¯ÉäÆµ¿¨Ä£¿é
 	ReadedCard=0;//³õÊ¼»¯¶ÁÈ¡µ½µÄ¿¨ºÅ
-	
+	Standby=0;
 	
 	
 // // TEST MOTOR CONVEYOR
@@ -248,7 +247,7 @@ int main(void)
 
 			if(espFlag==0) //ÔÚÎ´ÔøÁ¬ÉÏWIFIÊ±ºò£¬²Å½øÐÐWIFIÁ´½Ó²Ù×÷£¬Á´½ÓÉÏºó½«²»ÔÙÖ´ÐÐ´Ë²Ù×÷¡£
 			{ 
-				Wifi_Connect();
+				Wifi_Connect();			
 			}						
 			while (espFlag)
 			{					
@@ -256,8 +255,8 @@ int main(void)
 				//***********·Ö²¼²âÊÔ¹ý³Ì*********************
 // 				while(1)
 // 				{
-// 				AGVRun();	//Ð¡³µÐÐ½ø×ÔÎÒ¿ØÖÆ
-// 				RFIDReader();	//ÉäÆµ¿¨¼ì²â
+//   				//AGVRun();	//Ð¡³µÐÐ½ø×ÔÎÒ¿ØÖÆ
+//  				RFIDReader();	//ÉäÆµ¿¨¼ì²â
 // 				}
 								
 				//***********·Ö²¼²âÊÔ¹ý³Ì*********************	
@@ -271,10 +270,11 @@ int main(void)
 						RFIDReader();	//ÉäÆµ¿¨¼ì²â
 					}
 					else if(RFID[15]!=0)
-						{ 
-							 ReadedCard =RFID[15];
-							 
-			  	  }
+					{ 
+						 ReadedCard =RFID[15];
+						 
+					}
+						
 					if((ReadedCard == UploadCardNumber)&&(UploadCardNumber!=0) && (DownloadCardNumber!=0))  //¶Áµ½¿¨Æ¬   get into Upload process   
 						{
 							PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È	
@@ -283,7 +283,7 @@ int main(void)
 							 motorQY_control(TIM2,0,2,1);
 							 motorHZ_control(TIM2,0,3,1);
 							 motorHY_control(TIM2,0,4,1);		
- Delay(500);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»							
+               Delay(500);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»							
 							 DuoJi(300);//¶æ»ú×ªµ½ÕÚµ²Î»ÖÃ	
 							 Delay(1000);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
@@ -309,211 +309,28 @@ int main(void)
 // 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
 // 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
 // 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							  Delay(30);
+// 							 Delay(30);
 // 							 motorQZ_control(TIM2,0,1,1);//stop
 // 							 motorQY_control(TIM2,0,2,1);
 // 							 motorHZ_control(TIM2,0,3,1);
 // 							 motorHY_control(TIM2,0,4,1);	
-// 	              Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»							 
+// 	             Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»							 
 // 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
 // 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
 // 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
 // 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
 // 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							motorQZ_control(TIM2,0,1,1);//stop
+// 							 motorQZ_control(TIM2,0,1,1);//stop
 // 							 motorQY_control(TIM2,0,2,1);
 // 							 motorHZ_control(TIM2,0,3,1);
 // 							 motorHY_control(TIM2,0,4,1);							
-// 								 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							
-// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
-// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
-// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,0,1,1);//stop
-// 							 motorQY_control(TIM2,0,2,1);
-// 							 motorHZ_control(TIM2,0,3,1);
-// 							 motorHY_control(TIM2,0,4,1);	
-// 							 	 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
-// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
-// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,0,1,1);//stop
-// 							 motorQY_control(TIM2,0,2,1);
-// 							 motorHZ_control(TIM2,0,3,1);
-// 							 motorHY_control(TIM2,0,4,1);
-// 						 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
-// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
-// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,0,1,1);//stop
-// 							 motorQY_control(TIM2,0,2,1);
-// 							 motorHZ_control(TIM2,0,3,1);
-// 							 motorHY_control(TIM2,0,4,1);
-// 								 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
-// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
-// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,0,1,1);//stop
-// 							 motorQY_control(TIM2,0,2,1);
-// 							 motorHZ_control(TIM2,0,3,1);
-// 							 motorHY_control(TIM2,0,4,1);
-// 						   Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
-// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
-// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,0,1,1);//stop
-// 							 motorQY_control(TIM2,0,2,1);
-// 							 motorHZ_control(TIM2,0,3,1);
-// 							 motorHY_control(TIM2,0,4,1);
-// 						 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
-// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
-// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,0,1,1);//stop
-// 							 motorQY_control(TIM2,0,2,1);
-// 							 motorHZ_control(TIM2,0,3,1);
-// 							 motorHY_control(TIM2,0,4,1);
 // 							 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
-// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
-// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,0,1,1);//stop
-// 							 motorQY_control(TIM2,0,2,1);
-// 							 motorHZ_control(TIM2,0,3,1);
-// 							 motorHY_control(TIM2,0,4,1);
-// 							 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
-// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
-// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,0,1,1);//stop
-// 							 motorQY_control(TIM2,0,2,1);
-// 							 motorHZ_control(TIM2,0,3,1);
-// 							 motorHY_control(TIM2,0,4,1);
-// 					     Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
-// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
-// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,0,1,1);//stop
-// 							 motorQY_control(TIM2,0,2,1);
-// 							 motorHZ_control(TIM2,0,3,1);
-// 							 motorHY_control(TIM2,0,4,1);
-// 							 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
-// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
-// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,0,1,1);//stop
-// 							 motorQY_control(TIM2,0,2,1);
-// 							 motorHZ_control(TIM2,0,3,1);
-// 							 motorHY_control(TIM2,0,4,1);
-// 							 					   Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
-// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
-// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,0,1,1);//stop
-// 							 motorQY_control(TIM2,0,2,1);
-// 							 motorHZ_control(TIM2,0,3,1);
-// 							 motorHY_control(TIM2,0,4,1);
-// 						 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
-// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
-// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,0,1,1);//stop
-// 							 motorQY_control(TIM2,0,2,1);
-// 							 motorHZ_control(TIM2,0,3,1);
-// 							 motorHY_control(TIM2,0,4,1);
-// 							 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 					   Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
-// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
-// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,0,1,1);//stop
-// 							 motorQY_control(TIM2,0,2,1);
-// 							 motorHZ_control(TIM2,0,3,1);
-// 							 motorHY_control(TIM2,0,4,1);
-// 						 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
-// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
-// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,0,1,1);//stop
-// 							 motorQY_control(TIM2,0,2,1);
-// 							 motorHZ_control(TIM2,0,3,1);
-// 							 motorHY_control(TIM2,0,4,1);
-// 							 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 					   Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
-// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
-// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,0,1,1);//stop
-// 							 motorQY_control(TIM2,0,2,1);
-// 							 motorHZ_control(TIM2,0,3,1);
-// 							 motorHY_control(TIM2,0,4,1);
-// 						 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
-// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
-// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,0,1,1);//stop
-// 							 motorQY_control(TIM2,0,2,1);
-// 							 motorHZ_control(TIM2,0,3,1);
-// 							 motorHY_control(TIM2,0,4,1);
-// 							 Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 					   Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
-// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
-// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,0,1,1);//stop
-// 							 motorQY_control(TIM2,0,2,1);
-// 							 motorHZ_control(TIM2,0,3,1);
-// 							 motorHY_control(TIM2,0,4,1);
-// 						   Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//run
-// 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
-// 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
-// 							 motorHY_control(TIM2,PWMPulseHigh,4,2);							
-// 							 Delay(30);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
-// 							 motorQZ_control(TIM2,0,1,1);//stop
-// 							 motorQY_control(TIM2,0,2,1);
-// 							 motorHZ_control(TIM2,0,3,1);
-// 							 motorHY_control(TIM2,0,4,1);
-							 //Delay(100);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+
 							 //PWMPulseHigh=60;//»Ö¸´agvÐÐ½øËÙ¶È
  							//FLAG=1;//AGV RUN ½«Ë®Æ¿×°ÔØ
                //Delay(1000);//µÈ´ý×°ÔØÍê³É
               // DuoJi(180);	//¶æ»ú×ªµ½Í¨¹ýÎ»ÖÃ
-							Delay(500);//µÈ´ýagvÐ¶ÔØµ½Î»
+							 Delay(500);//µÈ´ýagvÐ¶ÔØµ½Î»
 							 DuoJi(220);	//¶æ»ú×ªµ½Í¨¹ýÎ»ÖÃ
 							 MotoBelt(1);//Ð¶ÔØ 
 							 Delay(500);//µÈ´ýagvÐ¶ÔØµ½Î»
@@ -522,13 +339,17 @@ int main(void)
   						 //PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È			
                RFID[15]=0;							
   						 ReadedCard = 0;   //  get out Upload process	
-               UploadCardNumber=0;				
-							 printf("Upload finished");
+							 //printf("%02x %02x %02x %02x %02x %02x \n", 187, 91,0,0, 179, 181);					
+               printf("%d %d %d %d %d %d \n", 0xBB, 0x5B,0x00,0x00, 0xB3, 0xB5);				
+																	
+							 UploadCardNumber=0;				
+// 						 printf("Upload finished");
+							 
 						}
 						
 			
 												
-				 if((ReadedCard==DownloadCardNumber) && (UploadCardNumber==0)&& (DownloadCardNumber!=0))
+				  if((ReadedCard==DownloadCardNumber) && (UploadCardNumber==0)&& (DownloadCardNumber!=0))
 					{												
 							//FLAG=0;// AGV STOP
 							 motorQZ_control(TIM2,0,1,1);
@@ -545,9 +366,12 @@ int main(void)
 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
 							 motorHY_control(TIM2,PWMPulseHigh,4,2);
 							 RFID[15]=0;						
-							 ReadedCard = 0;   //  get out Download process		
-							 DownloadCardNumber=0;		
-							 printf("Download finished");
+							 ReadedCard = 0;   //  get out Download process
+					 //  printf("Download finished");						
+						   //printf("%02x %02x %02x %02x %02x %02x \n", 187, 91,0,0, 180, 181);					             	 
+					   printf("%d %d %d %d %d %d \n", 0xBB, 0x5B,0x00,0x00, 0xB4, 0xB5);	 	 
+						DownloadCardNumber=0;		
+							
 					}
 					if((ReadedCard==DownloadCardNumber) && (UploadCardNumber!=0))//Èç¹û¶Áµ½Ð¶ÔØ¿¨Æ¬£¬µ«ÊÇ»¹Î´×°ÔØ£¬ÄÇÃ´¾Í»Ö¸´agvËÙ¶È
 					{
@@ -558,6 +382,31 @@ int main(void)
 					}
 			
 				}
+// 				else if(Standby == 0)   //Èç¹ûagvÃ»ÓÐÈÎÎñ£¬ÇÒÎ´µ½´ï´ý»úÎ»ÖÃ
+// 				{
+// 										
+// 					if(RFID[15] == 0)
+// 					{				
+// 						RFIDReader();	//ÉäÆµ¿¨¼ì²â
+// 					}
+// 					else if(RFID[15] == 0xFF)
+// 					{ 
+// 						 Standby = RFID[15];
+// 						 motorQZ_control(TIM2,0,1,1);//stop
+// 						 motorQY_control(TIM2,0,2,1);
+// 						 motorHZ_control(TIM2,0,3,1);
+// 						 motorHY_control(TIM2,0,4,1);	
+// 						 PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È
+// 						 RFID[15]=0;
+// 					}										
+// 					else
+// 					{		 			   
+// 				    	RFID[15] = 0;		
+// 						  PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È						
+// 					}
+// 					
+// 			 }
+		
 		  }
 	}
 }
@@ -788,7 +637,7 @@ u8 InfraredDetection(void)
 	//printf("\n distance = %d mV  \r\n",distance);
 // 		Delay(50);
 		
-	if( (!T1) && (!T2) && (!T3)&& (!T4)&& (!T5)&&((UploadCardNumber!=0) || (DownloadCardNumber!=0)))//È«²¿±»ÕÚµ²Ê±,ÈÏÎª½øÈë¼õËÙ´ø£¬×¼±¸RFID¼ì²â
+	if( (!T1) && (!T2) && (!T3)&& (!T4)&& (!T5)&&((UploadCardNumber!=0) || (DownloadCardNumber!=0) || (Standby==0) ))//È«²¿±»ÕÚµ²Ê±,ÈÏÎª½øÈë¼õËÙ´ø£¬×¼±¸RFID¼ì²â
 	{
 
 				PWMPulseHigh=60;
@@ -895,7 +744,6 @@ void  Wifi_Connect(void)
 		Wifi_Flag=1;
 		Delay(1000);
 		}
-				
  		
 	if(Wifi_Flag==2)
 	{
@@ -928,7 +776,9 @@ void  Wifi_Connect(void)
 			Wifi_Flag=8;  //WIFIÁ¬½ÓOK±êÖ¾(Wifi_Flag=8;)
 			espFlag=1;
 			Wifi_Touchuan=1;
-			printf("WIFI connected");
+// 	  printf("WIFI connected");
+			printf("%02x %02x %02x %02x %02x %02x \n", 0xBB, 0x5B, 0x00, 0x00, 0xB1, 0xB5);
+    
 			DuoJi(220);//¶æ»ú×ªµ½ÕÚµ²Î»Ö
 			Delay(5000);
 		}
@@ -949,7 +799,7 @@ u8 RFIDReader(void)
 											{
 														 
 												RFID_status = RFID_XunKa_OK;
-												
+// 											printf("PcdRequest_MI_OK,  TagType is %02x%02x     \n",CT[0],CT[1]);	
 												status=MI_ERR;
 												status = PcdAnticoll(SN);/*·À³å×²*/	
 											}
@@ -958,6 +808,7 @@ u8 RFIDReader(void)
 												{      
                          													
 													RFID_status = RFID_FangChongZhuang_OK ;
+// 												printf("PcdAnticoll_MI_OK,  SN is %02x%02x%02x%02x     \n",SN[0],SN[1],SN[2],SN[3]);	
 													status=MI_ERR;
 													status =PcdSelect(SN);//ßx¿¨	
 														
@@ -977,23 +828,21 @@ u8 RFIDReader(void)
 														
 														RFID_status = RFID_YanZheng_OK   ;
 														status=MI_ERR;
-														status=PcdRead(s,RFID); //¶Á¿¨
-														// status=PcdWrite(s,RFIDWrite); //Ð´¿¨
+// status=PcdWrite(s,RFIDWrite); //Ð´¿¨
+// status=MI_ERR;
+														 status=PcdRead(s,RFID); //¶Á¿¨
+														
 													}					
 		
 	case RFID_YanZheng_OK:				
 																if (status==MI_OK)
 																{  
 
-																		CardNumber=RFID[15]; 
-																		printf("READ_Card the %d area data is  %02x  \n",s,CardNumber);										
-// 																		RFID[15]=0;
- 																		//FLAG=0;
-// 																		 motorQZ_control(TIM2,0,1,4);
-// 																		 motorQY_control(TIM2,0,2,4);
-// 																		 motorHZ_control(TIM2,0,3,4);
-// 																		 motorHY_control(TIM2,0,4,4);	
- //                      PWMPulseHigh=80;																	
+																	  CardNumber=RFID[15]; 
+// 																	printf("READ_Card the %d area data is  %02x  \n",s,CardNumber);																									
+// 																	printf("READ_Card the %d area data is  %02x  \n",s,CardNumber);																									
+																	  //printf("%02x %02x %02x %02x %02x %02x \n",187, 91,CardNumber,0, 182, 181);
+																	printf("%d %d %d %d %d %d \n", 0xBB, 0x5B,CardNumber,0x00, 0xB6, 0xB5);				
 																	RFID_status = RFID_DuKa_OK   ;																	
 																	status=MI_ERR;
 																

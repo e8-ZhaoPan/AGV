@@ -3,9 +3,9 @@
 <title>Static Call Graph - [..\Output\STM32-DEMO.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\Output\STM32-DEMO.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 24]: Last Updated: Wed Jan 20 17:29:31 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 24]: Last Updated: Mon Jan 25 16:45:43 2016
 <BR><P>
-<H3>Maximum Stack Usage =        152 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        176 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 main &rArr; RFIDReader &rArr; PcdAuthState &rArr; PcdComMF522 &rArr; ClearBitMask &rArr; ReadRawRC
 <P>
@@ -341,8 +341,8 @@ Global Symbols
 <LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Wifi_Connect
 </UL>
 
-<P><STRONG><a name="[54]"></a>RFIDReader</STRONG> (Thumb, 140 bytes, Stack size 24 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = RFIDReader &rArr; PcdAuthState &rArr; PcdComMF522 &rArr; ClearBitMask &rArr; ReadRawRC
+<P><STRONG><a name="[54]"></a>RFIDReader</STRONG> (Thumb, 150 bytes, Stack size 32 bytes, main.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 160<LI>Call Chain = RFIDReader &rArr; PcdAuthState &rArr; PcdComMF522 &rArr; ClearBitMask &rArr; ReadRawRC
 </UL>
 <BR>[Calls]<UL><LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PcdSelect
 <LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PcdRequest
@@ -354,7 +354,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[5b]"></a>InfraredDetection</STRONG> (Thumb, 572 bytes, Stack size 8 bytes, main.o(.text))
+<P><STRONG><a name="[5b]"></a>InfraredDetection</STRONG> (Thumb, 578 bytes, Stack size 8 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = InfraredDetection
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ReadInputDataBit
@@ -362,7 +362,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AGVRun
 </UL>
 
-<P><STRONG><a name="[5d]"></a>AGVRun</STRONG> (Thumb, 800 bytes, Stack size 8 bytes, main.o(.text))
+<P><STRONG><a name="[5d]"></a>AGVRun</STRONG> (Thumb, 782 bytes, Stack size 8 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = AGVRun &rArr; motorQZ_control
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorQZ_control
@@ -374,8 +374,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[62]"></a>Wifi_Connect</STRONG> (Thumb, 236 bytes, Stack size 8 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = Wifi_Connect &rArr; __2printf
+<P><STRONG><a name="[62]"></a>Wifi_Connect</STRONG> (Thumb, 254 bytes, Stack size 24 bytes, main.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = Wifi_Connect &rArr; __2printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
 <LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DuoJi
@@ -385,8 +385,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[46]"></a>main</STRONG> (Thumb, 910 bytes, Stack size 0 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = main &rArr; RFIDReader &rArr; PcdAuthState &rArr; PcdComMF522 &rArr; ClearBitMask &rArr; ReadRawRC
+<P><STRONG><a name="[46]"></a>main</STRONG> (Thumb, 972 bytes, Stack size 16 bytes, main.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 176<LI>Call Chain = main &rArr; RFIDReader &rArr; PcdAuthState &rArr; PcdComMF522 &rArr; ClearBitMask &rArr; ReadRawRC
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_control
 <LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorQZ_control
