@@ -22,6 +22,7 @@ void TIM3_NVIC_Configuration(void)
 void TIM3_Configuration(void)
 {
     TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+	
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3 , ENABLE);
     TIM_DeInit(TIM3);
     TIM_TimeBaseStructure.TIM_Period=1000;	//自动重装载寄存器周期的值(计数值) 
@@ -29,7 +30,8 @@ void TIM3_Configuration(void)
     TIM_TimeBaseStructure.TIM_Prescaler= (72 - 1);	//时钟预分频数 72M/72      
     TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up; //向上计数模式 
     TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
-    TIM_ClearFlag(TIM3, TIM_FLAG_Update);	// 清除溢出中断标志 
+    
+	  TIM_ClearFlag(TIM3, TIM_FLAG_Update);	// 清除溢出中断标志 
     TIM_ITConfig(TIM3,TIM_IT_Update,ENABLE);
     TIM_Cmd(TIM3, ENABLE);	// 开启时钟    
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3 , DISABLE);	//先关闭等待使用  

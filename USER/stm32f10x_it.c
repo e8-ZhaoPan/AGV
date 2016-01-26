@@ -428,7 +428,7 @@ void TIM3_IRQHandler(void)
 	if ( TIM_GetITStatus(TIM3 , TIM_IT_Update) != RESET ) 
 	{	
 		TIM_ClearITPendingBit(TIM3 , TIM_FLAG_Update);    
-  		 T3time++;
+  	T3time++;
 	}	
 
 	 //*************定时器测试*********************
@@ -438,15 +438,15 @@ void TIM3_IRQHandler(void)
 			
 			STOP_TIME;   /* TIM3 停止计时 */
       T3time = 0;				     
-				if(timeout==0)
+			if(timeout==0)
 			{
 				
 			for(i=0;i<=5;i++)
-					{
-						USART_RX_BUF[i]=0;
-					}
-				TouYanZheng=0;
-				counter_BUF=0;  //清计数	
+			{
+				USART_RX_BUF[i]=0;
+			}
+			TouYanZheng=0;
+			counter_BUF=0;  //清计数	
 			} 
 			
     } 
