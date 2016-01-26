@@ -32,7 +32,7 @@
 
 /*******************************
 PA4¡¢5¡¢6¡¢7£ºSPI1_NSS¡¢SPI1_SCK¡¢SPI1_MISO¡¢SPI1_MOSI
-*Á¬ÏßËµÃ÷£º
+*RDIDÁ¬ÏßËµÃ÷£º
 *1--SS£¨sda£© <----->PF0  pa2   ´Ó»úÑ¡Ôñ  
 *2--SCK <----->PB13   Ê±ÖÓÊä³ö
 *3--MOSI<----->PB15   ÉäÆµÊý¾ÝÊä³ö
@@ -81,7 +81,7 @@ volatile u32 T3time=0; // ms ¼ÆÊ±±äÁ¿
 	u8 Wifi_Touchuan=0; //Í¸´«±êÖ¾
   u8 WifiStartR=0;
   u8 UploadCardNumber=0,DownloadCardNumber=0,Standby=0;//Í¨ÐÅÖ¸ÁîÖ¸Áîagv×°ÔØÎ»ÖÃ¡¢Ð¶ÔØÎ»ÖÃ¡¢´ý»úÎ»ÖÃ
-
+  u8 ReadedCard;
 //bool T1,T2,T3,T4,T5,clp;  //ÊäÈëDI±äÁ¿
 u8 Track; 	 //ÐÐ¶¯Â·Ïß
 u8 FLAG;//Í¨¹ý·ÇÑ­¼£·½Ê½¿ØÖÆagvÐÐ×ß
@@ -111,22 +111,22 @@ void Delay(unsigned long time)
 	}
 }
 
-// ½â·ÅPA11ºÍPA12£¬Ê¹µÃÆä¿ÉÒÔ×öÆÕÍ¨GPIOÊ¹ÓÃ
+// ½â·ÅPA11ºÍPA12£¬Ê¹µÃÆä¿ÉÒÔ×öÆÕÍ¨GPIOÊ¹ÓÃ  È¡ÏûÓ³Ïñcan½Ó¿Ú   ÉèÖÃAFIO->MAPRµÄ14£º13Î»=01
 void USBCAN_GPIO_NoRemap(void)
 {
-		 RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);  //Ê¹ÄÜ¶ÔÓ¦GPIOÊ±ÖÓ
+		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);  //Ê¹ÄÜ¶ÔÓ¦GPIOÊ±ÖÓ
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);   //Ê¹ÄÜAFIOÖØÓ³ÉäÊ±ÖÓ
-		AFIO->MAPR |= 0x2000;				//½øÐÐÖØÓ³ÉäÅäÖÃ
+		AFIO->MAPR |= 0x2000;				//½øÐÐÖØÓ³ÉäÅäÖÃ 
 		AFIO->MAPR &=~0x4000;
 }	
 
 //½â·ÅPA15ºÍPB3ºÍPB4£¬Ê¹µÃÆä¿ÉÒÔ×öÆÕÍ¨GPIOÊ¹ÓÃ
-void JTAGDisable_GPIO_NoRemap(void)
+void JTAGDisable_GPIO_NoRemap(void) 
 {
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);  //Ê¹ÄÜ¶ÔÓ¦GPIOÊ±ÖÓ
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);  //Ê¹ÄÜ¶ÔÓ¦GPIOÊ±ÖÓ
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);   //Ê¹ÄÜAFIOÖØÓ³ÉäÊ±ÖÓ
-		GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);  //¿âº¯ÊýÊµÏÖÖØÓ³Éä
+		GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);  //¹Ø±ÕJTAG-DP,¿ªÆôSW-DP
 		
 // 		AFIO->MAPR &=~0x01000000;										//Ö±½Ó²Ù×÷¼Ä´æÆ÷ÊµÏÖ								
 // 		AFIO->MAPR |= 0x02000000;
@@ -140,7 +140,6 @@ void LED_GPIO_Config(void);
 void ControlDI_AGV_GPIO_Config(void);
 void ControlDO_AGV_GPIO_Config(void);
 u8 RFIDReader(void);
-u8 ReadedCard;
 void MotoBelt(u16 direction);
 void MotoBeltControl(void);//Æ¤´øµç»úÍ¨ÐÅ¿ØÖÆ
 u8  InfraredDetection(void);
@@ -151,7 +150,7 @@ void Wifi_Connect(void);
 void TIM3_NVIC_Configuration(void);
 void TIM3_Configuration(void);
 void BOOT1_ReleaseToGPIO(void);
-void RFID_SN_Control(void);
+//void RFID_SN_Control(void);
 void AGVRun(void);
 void DuoJi(u16 jiaodu);
 
@@ -179,9 +178,9 @@ int main(void)
 	PWM_GPIO_Configuration();
 	TIM2_Configuration();
 	//TIM3_Configuration();
-	motor_control();
+	motor_control();//³õÊ¼»¯³µÂÖ¿ØÖÆ
 	//PC¿Ú³õÊ¼»¯
-	ControlDOC_AGV_GPIO_Config();
+	//ControlDOC_AGV_GPIO_Config();
 	NVIC_Configuration();
 	/*¶æ»ú³õÊ¼»¯ÉèÖÃ*/
 	HighSysTick =150;  //SysTick ¶æ»ú¿ØÖÆ£º20msÖÜÆÚ£¬0.5ms~2.5ms¸ßµçÆ½Õ¼¿Õ±È-------0¶È~180¶È(¸ßµçÆ½Ê±ÖÓ¿ØÖÆ)HighSysTick È¡Öµ50~250
@@ -201,7 +200,9 @@ int main(void)
 	InitRc522();				//³õÊ¼»¯ÉäÆµ¿¨Ä£¿é
 	ReadedCard=0;//³õÊ¼»¯¶ÁÈ¡µ½µÄ¿¨ºÅ
 	Standby=0;
-	
+	Delay(5000);
+	RFID[15]=0;
+  DuoJi(300);//¶æ»ú×ªµ½ÕÚµ²Î»Ö
 	
 // // TEST MOTOR CONVEYOR
 // while(1)
@@ -239,9 +240,7 @@ int main(void)
  //***********SysTick Testing*********************
 	
 	
-	Delay(5000);
-	RFID[15]=0;
-  DuoJi(300);//¶æ»ú×ªµ½ÕÚµ²Î»Ö
+
 		while(1)
 	 { 
 
@@ -276,7 +275,7 @@ int main(void)
 					}
 						
 					if((ReadedCard == UploadCardNumber)&&(UploadCardNumber!=0) && (DownloadCardNumber!=0))  //¶Áµ½¿¨Æ¬   get into Upload process   
-						{
+					{
 							PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È	
 							//FLAG=0;// AGV STOP
 							 motorQZ_control(TIM2,0,1,1);//stop
@@ -340,7 +339,7 @@ int main(void)
                RFID[15]=0;							
   						 ReadedCard = 0;   //  get out Upload process	
 							 //printf("%02x %02x %02x %02x %02x %02x \n", 187, 91,0,0, 179, 181);					
-               printf("%d %d %d %d %d %d \n", 0xBB, 0x5B,0x00,0x00, 0xB3, 0xB5);				
+               printf("%2x %2x %2x %2x %2x %2x \n", 0xBB, 0x5B,0x00,0x00, 0xB3, 0xB5);				
 																	
 							 UploadCardNumber=0;				
 // 						 printf("Upload finished");
@@ -369,43 +368,47 @@ int main(void)
 							 ReadedCard = 0;   //  get out Download process
 					 //  printf("Download finished");						
 						   //printf("%02x %02x %02x %02x %02x %02x \n", 187, 91,0,0, 180, 181);					             	 
-					   printf("%d %d %d %d %d %d \n", 0xBB, 0x5B,0x00,0x00, 0xB4, 0xB5);	 	 
-						DownloadCardNumber=0;		
+					     printf("%2x %2x %2x %2x %2x %2x \n", 0xBB, 0x5B,0x00,0x00, 0xB4, 0xB5);	 	 
+						   DownloadCardNumber=0;		
 							
 					}
 					if((ReadedCard==DownloadCardNumber) && (UploadCardNumber!=0))//Èç¹û¶Áµ½Ð¶ÔØ¿¨Æ¬£¬µ«ÊÇ»¹Î´×°ÔØ£¬ÄÇÃ´¾Í»Ö¸´agvËÙ¶È
 					{
-		        RFID[15]=0;	
+		           RFID[15]=0;	
 						   ReadedCard = 0;   //  get out Download process									 
 							 PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È	
 
 					}
 			
 				}
-// 				else if(Standby == 0)   //Èç¹ûagvÃ»ÓÐÈÎÎñ£¬ÇÒÎ´µ½´ï´ý»úÎ»ÖÃ
-// 				{
-// 										
-// 					if(RFID[15] == 0)
-// 					{				
-// 						RFIDReader();	//ÉäÆµ¿¨¼ì²â
-// 					}
-// 					else if(RFID[15] == 0xFF)
-// 					{ 
-// 						 Standby = RFID[15];
-// 						 motorQZ_control(TIM2,0,1,1);//stop
-// 						 motorQY_control(TIM2,0,2,1);
-// 						 motorHZ_control(TIM2,0,3,1);
-// 						 motorHY_control(TIM2,0,4,1);	
-// 						 PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È
-// 						 RFID[15]=0;
-// 					}										
-// 					else
-// 					{		 			   
-// 				    	RFID[15] = 0;		
-// 						  PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È						
-// 					}
-// 					
-// 			 }
+				else if(Standby == 0)   //Èç¹ûagvÃ»ÓÐÈÎÎñ£¬ÇÒÎ´µ½´ï´ý»úÎ»ÖÃ
+				{  
+									
+					if(RFID[15] == 0)
+					{				
+						RFIDReader();	//ÉäÆµ¿¨¼ì²â
+					}
+				  if(RFID[15] == 0xff)
+					{ 
+						
+						 Standby = 1;
+						 FLAG=0;// AGV STOP
+						 motorQZ_control(TIM2,0,1,1);//stop
+						 motorQY_control(TIM2,0,2,1);
+						 motorHZ_control(TIM2,0,3,1);
+						 motorHY_control(TIM2,0,4,1);	
+						 PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È
+						 RFID[15]=0;
+						 Delay(1000);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+					}										
+					if((RFID[15]!= 0xff) && (RFID[15]!= 0))
+					{		 			   
+				    	RFID[15] = 0;		
+						  PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È			
+	            						
+					}
+					
+			 }
 		
 		  }
 	}
@@ -610,6 +613,7 @@ void MotoBeltControl(void)//Æ¤´øµç»úÍ¨ÐÅ¿ØÖÆ
 }	
 
 
+//Ñ­¼£¼ì²â
 u8 InfraredDetection(void)
 {
 	u8 HongWaiStatus=2;
@@ -729,8 +733,7 @@ u8 InfraredDetection(void)
 	
 }
 
-/******ÒÔÏÂÎªWifiÁ´½Ó²Ù×÷*********/
-
+// WifiÁ´½Ó²Ù×÷
 void  Wifi_Connect(void)
 {
 	u8 ifor;
@@ -777,15 +780,13 @@ void  Wifi_Connect(void)
 			espFlag=1;
 			Wifi_Touchuan=1;
 // 	  printf("WIFI connected");
-			printf("%02x %02x %02x %02x %02x %02x \n", 0xBB, 0x5B, 0x00, 0x00, 0xB1, 0xB5);
+			printf("%2x %2x %2x %2x %2x %2x \n", 0xBB, 0x5B, 0x00, 0x00, 0xB1, 0xB5);
     
 			DuoJi(220);//¶æ»ú×ªµ½ÕÚµ²Î»Ö
 			Delay(5000);
 		}
 	}
-		
-/*****ÒÔÉÏÎªWifiÁ´½Ó²Ù×÷*********/	
-
+//RFID¶Á¿¨
 u8 RFIDReader(void)
 {
 	unsigned char status;
@@ -838,13 +839,11 @@ u8 RFIDReader(void)
 																if (status==MI_OK)
 																{  
 
-																	  CardNumber=RFID[15]; 
+																	  CardNumber=RFID[15]; 																						
 // 																	printf("READ_Card the %d area data is  %02x  \n",s,CardNumber);																									
-// 																	printf("READ_Card the %d area data is  %02x  \n",s,CardNumber);																									
-																	  //printf("%02x %02x %02x %02x %02x %02x \n",187, 91,CardNumber,0, 182, 181);
-																	printf("%d %d %d %d %d %d \n", 0xBB, 0x5B,CardNumber,0x00, 0xB6, 0xB5);				
-																	RFID_status = RFID_DuKa_OK   ;																	
-																	status=MI_ERR;
+																		printf("%2x %2x %2x %2x %2x %2x \n", 0xBB, 0x5B,CardNumber,0x00, 0xB6, 0xB5);				
+																		RFID_status = RFID_DuKa_OK   ;																	
+																		status=MI_ERR;
 																
 																}										
 	case 	RFID_DuKa_OK :			
@@ -930,24 +929,4 @@ u8 RFIDReader(void)
 /****************ÒÔÉÏÎªRFID-RC522²Ù×÷******************************/
 }	
 
-void RFID_SN_Control(void)  //Read RFID SN ÅÐ¶ÏÏàÓ¦¶¯×÷  99 88 77 66 02
-{
-	if(USFlag==1 && RFID[15]==0x01 && RFID[14]==0x66 && RFID[13]==0x77 && RFID[12]==0x88 && RFID[11]==0x99)
-	{
-// 																		MotoBelt(1);
-																		 MotoBelt(2);
-																		 Delay(5000);	
-																			USFlag=0;
-																		 MotoBelt(0);
-	}
-	if(USFlag==2 && RFID[15]==0x02 && RFID[14]==0x66 && RFID[13]==0x77 && RFID[12]==0x88 && RFID[11]==0x99)
-	{
-																		MotoBelt(1);
-// 																	 MotoBelt(2);
-																		 Delay(5000);	
-																			USFlag=0;
-																		 MotoBelt(0);
-	}
-	
-																			
-}
+

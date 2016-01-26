@@ -26,12 +26,12 @@ void USART1_Config(void)
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1 | RCC_APB2Periph_GPIOA, ENABLE); 
 
 		/* USART1 使用IO端口配置 */    
-		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;   //TX
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP; //复用推挽输出
 		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 		GPIO_Init(GPIOA, &GPIO_InitStructure);    
 		
-		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;  //RX
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;	//浮空输入
 		GPIO_Init(GPIOA, &GPIO_InitStructure);   //初始化GPIOA
 			

@@ -1,14 +1,68 @@
 引脚说明：
+
+1  舵机引脚：
 舵机的控制引脚为PB8，和电路板的led显示引脚是一个。
+
+2  RDID连线：
+	*1--SS（sda）<----->pa2   从机选择  
+	*2--SCK <----->PB13   时钟输出
+	*3--MOSI<----->PB15   射频数据输出
+	*4--MISO<----->PB14   射频模块输入
+	*5--悬空
+	*6--GND <----->GND
+	*7--RST <----->pa3  休眠控制
+	*8--VCC <----->VCC   
+	************************************/
+
+3  红外检测
+	T1 = GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_4);
+
+	T2 = GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_5);
+
+	T3 = GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_8);
+
+	T4 = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_9);
+
+	T5 = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_6);
+
+	clp = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_7);
+
+	distance = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_4);
+
+4  转运皮带
+   	继电器1		GPIO_ResetBits(GPIOB, GPIO_Pin_10);  //1
+	继电器4		GPIO_ResetBits(GPIOB, GPIO_Pin_2);   //4	
+    继电器2	    GPIO_SetBits(GPIOB, GPIO_Pin_11);    //2	
+	继电器3		GPIO_SetBits(GPIOA, GPIO_Pin_15);    //3	
+
+6  车轮PWM
+   /**TIM2的4路Channel_PA0左前轮转速__PA1右前轮转速__PA2左后轮转速__PA3右后轮转速**/
+
+7  车轮模式
+   /**前左电机模式定义**/
+	#define   MotorQZ_IN1_Set     GPIO_SetBits(GPIOA, GPIO_Pin_6)
+	#define   MotorQZ_IN2_Reset   GPIO_ResetBits(GPIOA, GPIO_Pin_7)			
+	/**前右电机模式定义**/
+	#define   MotorQY_IN1_Set     GPIO_SetBits(GPIOB, GPIO_Pin_0)
+	#define   MotorQY_IN2_Reset   GPIO_ResetBits(GPIOB, GPIO_Pin_1)	
+	/**后左电机模式定义**/
+	#define   MotorHZ_IN1_Set     GPIO_SetBits(GPIOB, GPIO_Pin_5)
+	#define   MotorHZ_IN2_Reset   GPIO_ResetBits(GPIOC, GPIO_Pin_13)		
+	/**后右电机模式定义**/
+	#define   MotorHY_IN1_Set     GPIO_SetBits(GPIOC, GPIO_Pin_14)
+	#define   MotorHY_IN2_Reset   GPIO_ResetBits(GPIOC, GPIO_Pin_15)	
 
 
 通信指令记录：
-1：通信指令为6个字节[0]-[5]    AA 5A 01 02 A5 A5
+1：通信指令为6个字节[0]-[5]    AA 5A 0A 02 A5 A5
 2：if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0x5A &&USART_RX_BUF[4]==0xA5 &&USART_RX_BUF[5]==0xA5) //下发rfid card卡号，在此卡位置装载或者是卸载
    [2]=装载卡号；(A、B、C、D、E.....)      [3]=卸载卡号：(1、2、3、4、5……)
    
  方法说明：
  1：u8 RFIDReader(void)   返回值CardNumber = rfid[15];
+ 2:void  Wifi_Connect(void)   wifi连接并设置为透传  设置完成标志为Wifi_Flag=8;
+ 3：
+ 
  
 整体流程完成。
 
@@ -17,17 +71,7 @@
 4、协议扩充：
 (1)WIFI connected:      BB 5B 00 00 B1 B5 
 (2)received CMD:        BB 5B 01 02 B2 B5 (01 02是举例的取货放货位置)
-(2)Upload finished:     BB 5B 00 00 B3 B5 
-(3)Download finished:   BB 5B 00 00 B4 B5 
+(3)Upload finished:     BB 5B 00 00 B3 B5 
+(4)Download finished:   BB 5B 00 00 B4 B5 
 (5)Disconnected server: BB 5B 00 00 B5 B5 
-(5)Readed card number:  BB 5B 01 00 B6 B5 (01 是举例的读到的卡号)
-
-
-3、（下发一次数据装载下载次数，增加STM32的缓存机制，队列最大容纳80个任务。每次接收指令之后回复当前队列的任务数量。-此功能在上位实现）
- 				
-4、协议扩充：
-(1)WIFI connected:      BB 5B 00 00 B1 B5 
-(2)received CMD:        BB 5B 01 02 B2 B5 (01 02是举例的取货放货位置)
-(2)Upload finished:     BB 5B 01 02 B3 B5 (01 02是举例的取货放货位置)
-(3)Download finished:   BB 5B 01 02 B4 B5 (01 02是举例的取货放货位置)
-(5)Disconnected server: BB 5B 00 00 B5 B5 
+(6)Readed card number:  BB 5B 01 00 B6 B5 (01 是举例的读到的卡号)

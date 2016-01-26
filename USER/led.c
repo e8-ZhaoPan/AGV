@@ -98,8 +98,8 @@ void ControlDO_AGV_GPIO_Config(void)
 
 void BOOT1_ReleaseToGPIO(void)
 { 
-	//注释：BOOT0外部引脚设置为BOOT0=1的情况下，BOOT1即可释放出来做普通GPIO来使用。
-	GPIO_InitTypeDef  GPIO_InitStructure;	
+	  //注释：BOOT0外部引脚设置为BOOT0=1的情况下，BOOT1即可释放出来做普通GPIO来使用。
+	  GPIO_InitTypeDef  GPIO_InitStructure;	
 		
 		/* Configure the GPIO pin */
 		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2 ;  //BOOT1的外部引脚

@@ -369,7 +369,7 @@ void USART1_IRQHandler(void)	//串口1中断服务程序
          		FLAG=1;                          //开始agv自动循迹功能		
             Standby = 0;						
 					 //	USFlag=USART_RX_BUF[2];					
-            printf("%d %d %d %d %d %d \n", 0xBB, 0x5B,USART_RX_BUF[2],USART_RX_BUF[3], 0xB2, 0xB5);
+            printf("%2x %2x %2x %2x %2x %2x \n", 0xBB, 0x5B,USART_RX_BUF[2],USART_RX_BUF[3], 0xB2, 0xB5);
 					}
 					
 // 					//SysTick控制
