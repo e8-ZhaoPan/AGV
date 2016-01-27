@@ -36,19 +36,19 @@
 	继电器3		GPIO_SetBits(GPIOA, GPIO_Pin_15);    //3	
 
 6  车轮PWM
-   /**TIM2的4路Channel_PA0左前轮转速__PA1右前轮转速__PA2左后轮转速__PA3右后轮转速**/
+   /**TIM2的4路Channel_PA0左前轮转速__PA1右前轮转速__PA2左后轮转速__PA3后右轮转速**/
 
 7  车轮模式
-   /**前左电机模式定义**/
+   /**前电右机模式定义**/
 	#define   MotorQZ_IN1_Set     GPIO_SetBits(GPIOA, GPIO_Pin_6)
 	#define   MotorQZ_IN2_Reset   GPIO_ResetBits(GPIOA, GPIO_Pin_7)			
-	/**前右电机模式定义**/
+	/**前左电机模式定义**/
 	#define   MotorQY_IN1_Set     GPIO_SetBits(GPIOB, GPIO_Pin_0)
 	#define   MotorQY_IN2_Reset   GPIO_ResetBits(GPIOB, GPIO_Pin_1)	
-	/**后左电机模式定义**/
+	/**后右电机模式定义**/
 	#define   MotorHZ_IN1_Set     GPIO_SetBits(GPIOB, GPIO_Pin_5)
 	#define   MotorHZ_IN2_Reset   GPIO_ResetBits(GPIOC, GPIO_Pin_13)		
-	/**后右电机模式定义**/
+	/**后左电机模式定义**/
 	#define   MotorHY_IN1_Set     GPIO_SetBits(GPIOC, GPIO_Pin_14)
 	#define   MotorHY_IN2_Reset   GPIO_ResetBits(GPIOC, GPIO_Pin_15)	
 
@@ -84,7 +84,7 @@
  5：void MotoBelt(u16 direction)	通过控制四个继电器的通断组合来控制皮带电机的正反转    输入参数 ： //0=停止，1=正转，2=反转
  6：void AGVRun(void)   根据红外检测的结果控制四个轮子的转动和方向 前进的时候四个轮子都向前转动，左转的时候左侧的轮子后转右侧的轮子前转，右转的时候参考左转，后退的时候全部都向后转动
  7：void motorQZ_control(TIM_TypeDef* TMM , uint16_t PWMPulse, u8 Channel, u8 Cmd)  输入参数1=产生pwm所使用的定时器号    输入参数2=pwm占空比   输入参数3=pwm的通道号，一个定时器可以产生4路pwm，而一个车轮只需要一路pwm
-    输入参数3=agv车轮转动的模式，由车轮控制的两个引脚的组合决定，0=停止 1=正转  2=反转 3=刹车。
+    输入参数3=agv车轮转动的模式，由车轮控制的两个引脚的组合决定，1=停止 2=正转  3=反转 4=刹车。
  8： void DuoJi(u16 jiaodu)  舵机控制引脚，舵机控制脉冲由系统滴答时钟（SysTick）产生，输入参数为50-250，對應0-180度。函数调用时启动滴答定时器，输出足够脉冲后自动关闭滴答定时器
  9：
  
