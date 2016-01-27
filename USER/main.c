@@ -180,7 +180,7 @@ int main(void)
 	//TIM3_Configuration();
 	motor_control();//初始化车轮控制
 	//PC口初始化
-	//ControlDOC_AGV_GPIO_Config();
+	ControlDOC_AGV_GPIO_Config();
 	NVIC_Configuration();
 	/*舵机初始化设置*/
 	HighSysTick =150;  //SysTick 舵机控制：20ms周期，0.5ms~2.5ms高电平占空比-------0度~180度(高电平时钟控制)HighSysTick 取值50~250

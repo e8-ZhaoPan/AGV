@@ -2,7 +2,7 @@
 ..\Output\stm32f10x_flash.o: ..\FWlib\inc\stm32f10x_flash.h
 ..\Output\stm32f10x_flash.o: ..\CMSIS\stm32f10x.h
 ..\Output\stm32f10x_flash.o: ..\CMSIS\core_cm3.h
-..\Output\stm32f10x_flash.o: C:\Keil ARM\ARM\ARMCC\bin\..\include\stdint.h
+..\Output\stm32f10x_flash.o: C:\Keil\ARM\ARMCC\bin\..\include\stdint.h
 ..\Output\stm32f10x_flash.o: ..\CMSIS\system_stm32f10x.h
 ..\Output\stm32f10x_flash.o: ..\USER\stm32f10x_conf.h
 ..\Output\stm32f10x_flash.o: ..\FWlib\inc\stm32f10x_adc.h
