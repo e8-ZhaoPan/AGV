@@ -31,7 +31,11 @@
 ### ADS-LD Output File: '..\Output\STM32-DEMO.axf'
 ### ADS-LD Command File: '..\Output\STM32-DEMO.lnp'
 ### Checking for dirty Components...
+<<<<<<< HEAD
 ### Creating CmdFile '..\Output\STM32-DEMO.lnp', Handle=0x00000B38
+=======
+### Creating CmdFile '..\Output\STM32-DEMO.lnp', Handle=0x00000218
+>>>>>>> 8fbaa17f2b5f8fa8f89f4087c4685cbba5779ec6
 ### Writing '.lnp' file
 ### ADS-LD Command file '..\Output\STM32-DEMO.lnp' is ready.
 ### ADS-LD: About to start ADS-LD Thread.
