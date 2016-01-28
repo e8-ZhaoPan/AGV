@@ -47,6 +47,7 @@ unsigned char CT[20];//¿¨ÀàÐÍ
 unsigned char SN[4]; //¿¨ºÅ
 unsigned char RFID[16];			//´æ·ÅRFID 
 unsigned char RFIDWrite[16]={0x00,0x00,0x00,0x00,0x00,0x00,0xff,0x07,0x80,0x29,0xff,0xff,0xff,0xff,0xff,0x0A};			//RFID writedata 
+u8 printout[6]={0xBB, 0x5B, 0x00, 0x00,0x00,0xB5 };
 // unsigned char card1_bit=0;
 // unsigned char card2_bit=0;
 // unsigned char card3_bit=0;
@@ -153,6 +154,7 @@ void BOOT1_ReleaseToGPIO(void);
 //void RFID_SN_Control(void);
 void AGVRun(void);
 void DuoJi(u16 jiaodu);
+void uartsend(u8 data);
 
 
 int main(void)
@@ -270,8 +272,12 @@ int main(void)
 					}
 					else if(RFID[15]!=0)
 					{ 
-						 ReadedCard =RFID[15];
-						 
+						if((RFID[15]==UploadCardNumber)||(RFID[15]==DownloadCardNumber))
+						{ ReadedCard =RFID[15];}
+						else if((RFID[15]!=UploadCardNumber)&&(RFID[15]!=DownloadCardNumber))
+						{ RFID[15]=0;
+            PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È
+             }
 					}
 						
 					if((ReadedCard == UploadCardNumber)&&(UploadCardNumber!=0) && (DownloadCardNumber!=0))  //¶Áµ½¿¨Æ¬   get into Upload process   
@@ -338,10 +344,15 @@ int main(void)
   						 //PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È			
                RFID[15]=0;							
   						 ReadedCard = 0;   //  get out Upload process	
-							 //printf("%02x %02x %02x %02x %02x %02x \n", 187, 91,0,0, 179, 181);					
-               printf("%2x %2x %2x %2x %2x %2x \n", 0xBB, 0x5B,0x00,0x00, 0xB3, 0xB5);				
-																	
-							 UploadCardNumber=0;				
+							 //printf("%02x %02x %02x %02x %02x %02x \n", 187, 91,0,0, 179, 181);					     				
+							 UploadCardNumber=0;
+							 uartsend(0xbb);
+							 uartsend(0x5b);
+							 uartsend(0x00);
+							 uartsend(0x00);
+							 uartsend(0xb3);
+							 uartsend(0xb5);
+											
 // 						 printf("Upload finished");
 							 
 						}
@@ -350,26 +361,31 @@ int main(void)
 												
 				  if((ReadedCard==DownloadCardNumber) && (UploadCardNumber==0)&& (DownloadCardNumber!=0))
 					{												
-							//FLAG=0;// AGV STOP
-							 motorQZ_control(TIM2,0,1,1);
+							
+							 motorQZ_control(TIM2,0,1,1);// AGV STOP
 							 motorQY_control(TIM2,0,2,1);
 							 motorHZ_control(TIM2,0,3,1);
 							 motorHY_control(TIM2,0,4,1);
 							 MotoBelt(2);//Ð¶ÔØ 
-							 Delay(5000);//µÈ´ýagvÐ¶ÔØµ½Î»
+							 Delay(4000);//µÈ´ýagvÐ¶ÔØµ½Î»
 						   MotoBelt(0);//Ð¶ÔØ
 						   PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È	
-						  //FLAG=1;//AGV RUN
-							 motorQZ_control(TIM2,PWMPulseHigh,1,2);
+						  
+							 motorQZ_control(TIM2,PWMPulseHigh,1,2);//AGV RUN
 							 motorQY_control(TIM2,PWMPulseHigh,2,2);
 							 motorHZ_control(TIM2,PWMPulseHigh,3,2);
 							 motorHY_control(TIM2,PWMPulseHigh,4,2);
 							 RFID[15]=0;						
 							 ReadedCard = 0;   //  get out Download process
-					 //  printf("Download finished");						
-						   //printf("%02x %02x %02x %02x %02x %02x \n", 187, 91,0,0, 180, 181);					             	 
-					     printf("%2x %2x %2x %2x %2x %2x \n", 0xBB, 0x5B,0x00,0x00, 0xB4, 0xB5);	 	 
-						   DownloadCardNumber=0;		
+					 //  printf("Download finished");										 		  
+							 DownloadCardNumber=0;	
+							 Standby = 1;
+						   uartsend(0xbb);
+							 uartsend(0x5b);
+							 uartsend(0x00);
+							 uartsend(0x00);
+							 uartsend(0xb4);
+							 uartsend(0xb5);
 							
 					}
 					if((ReadedCard==DownloadCardNumber) && (UploadCardNumber!=0))//Èç¹û¶Áµ½Ð¶ÔØ¿¨Æ¬£¬µ«ÊÇ»¹Î´×°ÔØ£¬ÄÇÃ´¾Í»Ö¸´agvËÙ¶È
@@ -381,7 +397,7 @@ int main(void)
 					}
 			
 				}
-				else if(Standby == 0)   //Èç¹ûagvÃ»ÓÐÈÎÎñ£¬ÇÒÎ´µ½´ï´ý»úÎ»ÖÃ
+				if(Standby == 1)   //Ð¶ÔØÍê³Éºó
 				{  
 									
 					if(RFID[15] == 0)
@@ -391,15 +407,15 @@ int main(void)
 				  if(RFID[15] == 0xff)
 					{ 
 						
-						 Standby = 1;
+						 Standby =0;
 						 FLAG=0;// AGV STOP
-						 motorQZ_control(TIM2,0,1,1);//stop
+						 motorQZ_control(TIM2,0,1,1);//stops
 						 motorQY_control(TIM2,0,2,1);
 						 motorHZ_control(TIM2,0,3,1);
 						 motorHY_control(TIM2,0,4,1);	
 						 PWMPulseHigh=80;//»Ö¸´agvÐÐ½øËÙ¶È
 						 RFID[15]=0;
-						 Delay(1000);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
+					//	 Delay(1000);	//µÈ´ý¶æ»ú×ª¶¯µ½Î»
 					}										
 					if((RFID[15]!= 0xff) && (RFID[15]!= 0))
 					{		 			   
@@ -413,6 +429,14 @@ int main(void)
 		  }
 	}
 }
+
+//´®¿Ú·¢ËÍÒ»¸ö×Ö½Ú 
+void uartsend(u8 data)
+{
+  USART_SendData(USART1, data);
+	while (!(USART1->SR & USART_FLAG_TXE));	
+}
+
 
 //¶æ™C½Ç¶È¿ØÖÆ 50-250Ö®égÔOÖÃ£¬Œ¦‘ª0-180¶È  
 void DuoJi(u16 jiaodu)
@@ -641,7 +665,7 @@ u8 InfraredDetection(void)
 	//printf("\n distance = %d mV  \r\n",distance);
 // 		Delay(50);
 		
-	if( (!T1) && (!T2) && (!T3)&& (!T4)&& (!T5)&&((UploadCardNumber!=0) || (DownloadCardNumber!=0) || (Standby==0) ))//È«²¿±»ÕÚµ²Ê±,ÈÏÎª½øÈë¼õËÙ´ø£¬×¼±¸RFID¼ì²â
+	if( (!T1) && (!T2) && (!T3)&& (!T4)&& (!T5)&&((UploadCardNumber!=0) || (DownloadCardNumber!=0) || (Standby==1) ))//È«²¿±»ÕÚµ²Ê±,ÈÏÎª½øÈë¼õËÙ´ø£¬×¼±¸RFID¼ì²â
 	{
 
 				PWMPulseHigh=60;
@@ -649,7 +673,7 @@ u8 InfraredDetection(void)
 	if( (T1) && (T2) && (T3)&& (T4)&& (T5))
 	{
 
-		HongWaiStatus=1;	//stop all 1(1)
+		HongWaiStatus=1;	//roll back (1)
 	}
 	if( (T1) && (T2) && (!T3)&& (T4)&& (T5))
 	{
@@ -780,8 +804,12 @@ void  Wifi_Connect(void)
 			espFlag=1;
 			Wifi_Touchuan=1;
 // 	  printf("WIFI connected");
-			printf("%2x %2x %2x %2x %2x %2x \n", 0xBB, 0x5B, 0x00, 0x00, 0xB1, 0xB5);
-    
+       uartsend(0xbb);
+			 uartsend(0x5b);
+			 uartsend(0x00);
+			 uartsend(0x00);
+			 uartsend(0xb1);
+			 uartsend(0xb5);
 			DuoJi(220);//¶æ»ú×ªµ½ÕÚµ²Î»Ö
 			Delay(5000);
 		}
@@ -841,7 +869,29 @@ u8 RFIDReader(void)
 
 																	  CardNumber=RFID[15]; 																						
 // 																	printf("READ_Card the %d area data is  %02x  \n",s,CardNumber);																									
-																		printf("%2x %2x %2x %2x %2x %2x \n", 0xBB, 0x5B,CardNumber,0x00, 0xB6, 0xB5);				
+	      uartsend(0xbb);
+			 uartsend(0x5b);
+			 uartsend(CardNumber);
+			 uartsend(0x00);
+			 uartsend(0xb6);
+			 uartsend(0xb5);
+
+																	
+      USART_SendData(USART1, 0xbb);
+			while (!(USART1->SR & USART_FLAG_TXE));
+			USART_SendData(USART1, 0x5b);
+			while (!(USART1->SR & USART_FLAG_TXE));
+			USART_SendData(USART1, CardNumber);
+			while (!(USART1->SR & USART_FLAG_TXE));
+			USART_SendData(USART1, 0x00);
+			while (!(USART1->SR & USART_FLAG_TXE));
+			USART_SendData(USART1, 0xb6);
+			while (!(USART1->SR & USART_FLAG_TXE));
+			USART_SendData(USART1, 0xb5);
+			while (!(USART1->SR & USART_FLAG_TXE));
+
+
+																	//printf("%2x %2x %2x %2x %2x %2x \n", 0xBB, 0x5B,CardNumber,0x00, 0xB6, 0xB5);				
 																		RFID_status = RFID_DuKa_OK   ;																	
 																		status=MI_ERR;
 																

@@ -51,6 +51,7 @@ extern  u8  High_Low ;   // ÔÚ¸ßµçÆ½Êä³öÊ±¿Ì»¹ÊÇµÍµçÆ½Êä³öÊ±¿Ì(0-¸ßµçÆ½Ê±¿Ì£¬1-µ
 u32 flag1=0;
 extern u8 Standby;
 extern   u8 UploadCardNumber,DownloadCardNumber;
+extern  void uartsend(u8 data);
 extern u8 ReadedCard;//³õÊ¼»¯¶ÁÈ¡µ½µÄ¿¨ºÅ
 /** @addtogroup Template_Project
   * @{
@@ -364,13 +365,39 @@ void USART1_IRQHandler(void)	//´®¿Ú1ÖÐ¶Ï·þÎñ³ÌÐò
 					if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0x5A &&USART_RX_BUF[4]==0xA5 &&USART_RX_BUF[5]==0xA5) //×°ÔØºÍÐ¶ÔØÎ»ÖÃÍ¨ÐÅ
  					{
 
-						UploadCardNumber = USART_RX_BUF[2];//×ª»»ÎªÊ®½øÖÆ
-						DownloadCardNumber = USART_RX_BUF[3];//×ª»»ÎªÊ®½øÖÆ	
-         		FLAG=1;                          //¿ªÊ¼agv×Ô¶¯Ñ­¼£¹¦ÄÜ		
-            Standby = 0;						
-					 //	USFlag=USART_RX_BUF[2];					
-            printf("%2x %2x %2x %2x %2x %2x \n", 0xBB, 0x5B,USART_RX_BUF[2],USART_RX_BUF[3], 0xB2, 0xB5);
-					}
+						if((USART_RX_BUF[2]==0) && (USART_RX_BUF[3]==0))  //»Ø´ý»úÎ»ÖÃ
+						{
+								 FLAG=1;
+							   UploadCardNumber=0;
+							   DownloadCardNumber =0;
+							   Standby = 1;
+
+						}		
+					  else	if((USART_RX_BUF[2]==0xff) && (USART_RX_BUF[3]==0xff))//½ô¼±Í£Ö¹
+						{
+               FLAG=0;
+               UploadCardNumber=0;
+							 DownloadCardNumber =0;
+							
+						}		
+						
+					 else      //Õý³£×°Ð¶ÔØ
+						{							
+								UploadCardNumber = USART_RX_BUF[2];
+								DownloadCardNumber = USART_RX_BUF[3];
+								FLAG=1;                          //¿ªÊ¼agv×Ô¶¯Ñ­¼£¹¦ÄÜ							
+								Standby = 0;
+						}
+						uartsend(0xbb);
+						uartsend(0x5b);
+						uartsend(USART_RX_BUF[2]);
+						uartsend(USART_RX_BUF[3]);
+						uartsend(0xb2);
+						uartsend(0xb5);
+         //   printf("%2x %2x %2x %2x %2x %2x \n", 0xBB, 0x5B,USART_RX_BUF[2],USART_RX_BUF[3], 0xB2, 0xB5);
+
+}
+
 					
 // 					//SysTick¿ØÖÆ
 // 					if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0xBB  &&USART_RX_BUF[4]==0xBB &&USART_RX_BUF[5]==0xAA)
