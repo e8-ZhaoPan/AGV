@@ -1,6 +1,6 @@
 Dependencies for Project 'STM32-DEMO', Target 'ADC-DEMO': (DO NOT MODIFY !)
 F (..\CMSIS\startup\startup_stm32f10x_hd.s)(0x49D96948)(--cpu Cortex-M3 -g --apcs=interwork --pd "__MICROLIB SETA 1" -I "C:\Keil ARM\ARM\RV31\INC" -I "C:\Keil ARM\ARM\CMSIS\Include" -I "C:\Keil ARM\ARM\Inc\ST\STM32F10x" --list "..\Listing\startup_stm32f10x_hd.lst" --xref -o "..\Output\startup_stm32f10x_hd.o" --depend "..\Output\startup_stm32f10x_hd.d")
-F (.\main.c)(0x56A87C66)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I "C:\Keil ARM\ARM\RV31\INC" -I "C:\Keil ARM\ARM\CMSIS\Include" -I "C:\Keil ARM\ARM\Inc\ST\STM32F10x" -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\main.o" --omf_browse "..\Output\main.crf" --depend "..\Output\main.d")
+F (.\main.c)(0x56A9796E)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I "C:\Keil ARM\ARM\RV31\INC" -I "C:\Keil ARM\ARM\CMSIS\Include" -I "C:\Keil ARM\ARM\Inc\ST\STM32F10x" -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\main.o" --omf_browse "..\Output\main.crf" --depend "..\Output\main.d")
 I (..\CMSIS\stm32f10x.h)(0x56984C88)
 I (..\CMSIS\core_cm3.h)(0x56976097)
 I (C:\Keil ARM\ARM\ARMCC\bin\..\include\stdint.h)(0x50F96150)
@@ -24,7 +24,7 @@ I (rc522.h)(0x568DBFF0)
 I (stm32f10x_it.h)(0x49D96964)
 I (Time_test.h)(0x568E09CE)
 I (SysTick.h)(0x569328EA)
-F (.\stm32f10x_it.c)(0x56A82DC6)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I "C:\Keil ARM\ARM\RV31\INC" -I "C:\Keil ARM\ARM\CMSIS\Include" -I "C:\Keil ARM\ARM\Inc\ST\STM32F10x" -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\stm32f10x_it.o" --omf_browse "..\Output\stm32f10x_it.crf" --depend "..\Output\stm32f10x_it.d")
+F (.\stm32f10x_it.c)(0x56A99F77)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I "C:\Keil ARM\ARM\RV31\INC" -I "C:\Keil ARM\ARM\CMSIS\Include" -I "C:\Keil ARM\ARM\Inc\ST\STM32F10x" -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\stm32f10x_it.o" --omf_browse "..\Output\stm32f10x_it.crf" --depend "..\Output\stm32f10x_it.d")
 I (stm32f10x_it.h)(0x49D96964)
 I (..\CMSIS\stm32f10x.h)(0x56984C88)
 I (..\CMSIS\core_cm3.h)(0x56976097)
@@ -332,4 +332,4 @@ I (..\FWlib\inc\stm32f10x_spi.h)(0x49D9694A)
 I (..\FWlib\inc\stm32f10x_tim.h)(0x49D9694A)
 I (..\FWlib\inc\stm32f10x_usart.h)(0x49D9694A)
 I (..\FWlib\inc\misc.h)(0x49D9694A)
-F (.\说明文档.txt)(0x56A87C66)()
+F (.\说明文档.txt)(0x56A99B1D)()

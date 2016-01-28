@@ -365,19 +365,39 @@ void USART1_IRQHandler(void)	//串口1中断服务程序
 					if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0x5A &&USART_RX_BUF[4]==0xA5 &&USART_RX_BUF[5]==0xA5) //装载和卸载位置通信
  					{
 
-						UploadCardNumber = USART_RX_BUF[2];//转换为十进制
-						DownloadCardNumber = USART_RX_BUF[3];//转换为十进制	
-         		FLAG=1;                          //开始agv自动循迹功能							
-					 //	USFlag=USART_RX_BUF[2];		
-						Standby = 0;
-				uartsend(0xbb);
-			 uartsend(0x5b);
-			 uartsend(UploadCardNumber);
-			 uartsend(DownloadCardNumber);
-			 uartsend(0xb2);
-			 uartsend(0xb5);
+						if((USART_RX_BUF[2]==0) && (USART_RX_BUF[3]==0))  //回待机位置
+						{
+								 FLAG=1;
+							   UploadCardNumber=0;
+							   DownloadCardNumber =0;
+							   Standby = 1;
+
+						}		
+					  else	if((USART_RX_BUF[2]==0xff) && (USART_RX_BUF[3]==0xff))//紧急停止
+						{
+               FLAG=0;
+               UploadCardNumber=0;
+							 DownloadCardNumber =0;
+							
+						}		
+						
+					 else      //正常装卸载
+						{							
+								UploadCardNumber = USART_RX_BUF[2];
+								DownloadCardNumber = USART_RX_BUF[3];
+								FLAG=1;                          //开始agv自动循迹功能							
+								Standby = 0;
+						}
+						uartsend(0xbb);
+						uartsend(0x5b);
+						uartsend(USART_RX_BUF[2]);
+						uartsend(USART_RX_BUF[3]);
+						uartsend(0xb2);
+						uartsend(0xb5);
          //   printf("%2x %2x %2x %2x %2x %2x \n", 0xBB, 0x5B,USART_RX_BUF[2],USART_RX_BUF[3], 0xB2, 0xB5);
-					}
+
+}
+
 					
 // 					//SysTick控制
 // 					if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0xBB  &&USART_RX_BUF[4]==0xBB &&USART_RX_BUF[5]==0xAA)

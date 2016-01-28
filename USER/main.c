@@ -275,7 +275,9 @@ int main(void)
 						if((RFID[15]==UploadCardNumber)||(RFID[15]==DownloadCardNumber))
 						{ ReadedCard =RFID[15];}
 						else if((RFID[15]!=UploadCardNumber)&&(RFID[15]!=DownloadCardNumber))
-						{ RFID[15]=0;}
+						{ RFID[15]=0;
+            PWMPulseHigh=80;//恢复agv行进速度
+             }
 					}
 						
 					if((ReadedCard == UploadCardNumber)&&(UploadCardNumber!=0) && (DownloadCardNumber!=0))  //读到卡片   get into Upload process   
