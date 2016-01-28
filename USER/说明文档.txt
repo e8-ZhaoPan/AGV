@@ -56,7 +56,7 @@
 通信指令记录：
 1：通信指令为6个字节[0]-[5]   装卸载	     AA 5A 0A 02 A5 A5
                               紧急停止	     AA 5A ff ff A5 A5
-						      回待机位置	 AA 5A 00 00 A5 A5
+			      回待机位置     AA 5A 00 00 A5 A5
 					  
 2：if(USART_RX_BUF[0]==0xAA &&USART_RX_BUF[1]==0x5A &&USART_RX_BUF[4]==0xA5 &&USART_RX_BUF[5]==0xA5) //下发rfid card卡号，在此卡位置装载或者是卸载
    [2]=装载卡号；(A、B、C、D、E.....)      [3]=卸载卡号：(1、2、3、4、5……)
