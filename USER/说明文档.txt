@@ -53,6 +53,19 @@
 	#define   MotorHY_IN2_Reset   GPIO_ResetBits(GPIOC, GPIO_Pin_15)	
 
 
+8  超声波壁障
+   
+	Trig = GPIO_ReadOutputDataBit(GPIOB, GPIO_Pin_7);
+	Echo = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_4);
+    屏蔽了红外检测函数中的接近和碰撞检测
+	屏蔽了led。c中的gpio的设置，改为trig=out_pp、echo=GPIO_Mode_IPD;  //下拉输入模式
+    用定时器4作为echo的计数 
+	增加了定时器4的初始化配置  /*中断周期为100us*/
+	
+
+
+
+
 通信指令记录：
 1：通信指令为6个字节[0]-[5]   装卸载	     AA 5A 0A 02 A5 A5
                               紧急停止	     AA 5A ff ff A5 A5
@@ -75,7 +88,7 @@
 1   TIM1
 2   TIM2   agv车轮控制pwm产生
 3   TIM3   串口通信接收  首字节和末尾字节的接收时间限制
-4   TIM4   未使用
+4   TIM4   超声波壁障定时器 
 
 
 

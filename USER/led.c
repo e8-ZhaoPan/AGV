@@ -44,13 +44,38 @@ void ControlDI_AGV_GPIO_Config(void)
 		/* Enable the GPIO_LED Clock */
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
 		/* Configure the GPIO pin */
-		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_9 | GPIO_Pin_14 | GPIO_Pin_4 ;
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_9 | GPIO_Pin_14  ;
 	//GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;  //浮空输入
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;  //下拉输入模式
 		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;	
 		GPIO_Init(GPIOB, &GPIO_InitStructure);	//输入点
   
 }
+
+/****超声波测距用IO点配置****/
+void Chaoshengbo_GPIO_Config(void)	
+{
+		GPIO_InitTypeDef  GPIO_InitStructure;	
+		/* Enable the GPIO_LED Clock */
+
+		/* Enable the GPIO_LED Clock */
+		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+	
+		GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_7 ;
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		 //推挽输出 
+		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	
+		GPIO_Init(GPIOC, &GPIO_InitStructure);	   //控制电机转向
+		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+	
+		/* Configure the GPIO pin */
+		GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_4 ;
+	//GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;  //浮空输入
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;  //下拉输入模式
+		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;	
+		GPIO_Init(GPIOB, &GPIO_InitStructure);	//输入点
+  
+}
+
 
 /***************  配置LED用到的I/O口 *******************/
 void ControlDO_AGV_GPIO_Config(void)	

@@ -60,13 +60,22 @@ u8 printout[6]={0xBB, 0x5B, 0x00, 0x00,0x00,0xB5 };
 // unsigned char card_4[4]={126,252,248,12};
 u8 KEY[6]={0xff,0xff,0xff,0xff,0xff,0xff};
 //unsigned char RFID1[16]={0x00,0x00,0x00,0x00,0x00,0x00,0xff,0x07,0x80,0x29,0xff,0xff,0xff,0xff,0xff,0x01};
+// unsigned char senddata1[]={0x41 ,0x54 ,0x2B ,0x43 ,0x49 ,0x50 ,0x53 ,0x54 ,0x41 ,0x52 ,0x54 ,0x3D ,0x22 ,
+// 	                         0x54 ,0x43 ,0x50 ,0x22 ,0x2C ,0x22 ,0x31 ,0x30 ,0x2E ,0x30 ,0x2E ,0x31 ,0x2E ,
+//                            0x31,0X37 ,0x22 ,0x2C ,0x38 ,0x30 ,0x0D ,0x0A };  //10.0.1.17:80
 unsigned char senddata1[]={0x41 ,0x54 ,0x2B ,0x43 ,0x49 ,0x50 ,0x53 ,0x54 ,0x41 ,0x52 ,0x54 ,0x3D ,0x22 ,
 	                         0x54 ,0x43 ,0x50 ,0x22 ,0x2C ,0x22 ,0x31 ,0x30 ,0x2E ,0x30 ,0x2E ,0x31 ,0x2E ,
-                           0x31,0X37 ,0x22 ,0x2C ,0x38 ,0x30 ,0x0D ,0x0A };  //10.0.1.17:80
+                           0x34 ,0x22 ,0x2C ,0x38 ,0x30 ,0x0D ,0x0A };  //10.0.1.4:80
+
 unsigned char senddata2[]={0x41 ,0x54 ,0x2B ,0x43 ,0x49 ,0x50 ,0x4D ,0x4F ,0x44 ,0x45 ,0x3D ,0x31 ,0x0D ,0x0A };
 unsigned char senddata3[]={0x41 ,0x54 ,0x2B ,0x43 ,0x49 ,0x50  ,0x53 ,0x45 ,0x4E ,0x44, 0x0D ,0x0A };
 u8 USFlag=0;
 volatile u32 T3time=0; // ms ¼ÆÊ±±äÁ¿
+volatile u32 T4time=0; // us ¼ÆÊ±±äÁ¿
+volatile u8  chaoshengboF=0; //³¬Éù²¨±êÖ¾
+volatile u32 chaoshengjishu=0;  //³¬Éù²¨¶¨Ê±Æ÷¼ÆÊý´ÎÊý
+volatile u32 chaoshengjuli=0;   ////³¬Éù²¨¼ì²â¾àÀë (µ¥Î»um)
+volatile u32 chaoshengjuliceshi=0;   ////³¬Éù²¨¼ì²â¾àÀë (µ¥Î»um)
 
 /*±äÁ¿¶¨ÒåÇø*/
 	u8 USART_RX_BUF[64];     //½ÓÊÕ»º³å,×î´ó64¸ö×Ö½Ú.
@@ -150,11 +159,15 @@ void NVIC_Configuration(void);
 void Wifi_Connect(void);
 void TIM3_NVIC_Configuration(void);
 void TIM3_Configuration(void);
+void TIM4_NVIC_Configuration(void);
+void TIM4_Configuration(void);
 void BOOT1_ReleaseToGPIO(void);
 //void RFID_SN_Control(void);
 void AGVRun(void);
 void DuoJi(u16 jiaodu);
 void uartsend(u8 data);
+void Chaoshengbo_GPIO_Config(void);
+void chaoshengboceju(void);
 
 
 int main(void)
@@ -178,6 +191,8 @@ int main(void)
 	/*³õÊ¼»¯PWM¿ØÖÆ*/
 	PWM_RCC_Configuration();
 	PWM_GPIO_Configuration();
+	/******³¬Éù²¨ÓÃIOÒý½Å********/
+  Chaoshengbo_GPIO_Config();
 	TIM2_Configuration();
 	//TIM3_Configuration();
 	motor_control();//³õÊ¼»¯³µÂÖ¿ØÖÆ
@@ -197,6 +212,9 @@ int main(void)
 	USART_ITConfig(USART1, USART_IT_RXNE , ENABLE);		//USART1½ÓÊÕÖÐ¶ÏÊ¹ÄÜ
 	TIM3_NVIC_Configuration(); /* TIM3(ÖÐ¶ÏÓÅÏÈ¼¶) ¶¨Ê±ÅäÖÃ */
   TIM3_Configuration(); 	 /* TIM3(³õÊ¼»¯) ¶¨Ê±ÅäÖÃ */
+	TIM4_NVIC_Configuration(); /* TIM4(ÖÐ¶ÏÓÅÏÈ¼¶) ¶¨Ê±ÅäÖÃ */
+  TIM4_Configuration(); 	 /* TIM4(³õÊ¼»¯) ¶¨Ê±ÅäÖÃ */
+	
 	
 //  	printf("Uart init OK            \n");	
 	InitRc522();				//³õÊ¼»¯ÉäÆµ¿¨Ä£¿é
@@ -206,6 +224,22 @@ int main(void)
 	RFID[15]=0;
   DuoJi(300);//¶æ»ú×ªµ½ÕÚµ²Î»Ö
 	
+	
+// 		while(1)
+//  {
+// // 	chaoshengboceju();
+// // 	 printf("%d",chaoshengjuli);
+// // 	  printf("start here");		
+// 	 
+// // 	 printf("%d",chaoshengboF);
+// 		
+// // 	 printf("%d",GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_4));
+// // 	 printf("%d",GPIO_ReadOutputDataBit(GPIOB, GPIO_Pin_7));
+// 	  	chaoshengboceju();
+// 	 Delay(100);
+//  	 printf("juli:%d   jishu:%d...biaozhi%d;",chaoshengjuli,chaoshengjishu,chaoshengjuliceshi);
+// 	 Delay(100);
+//  }
 // // TEST MOTOR CONVEYOR
 // while(1)
 // {
@@ -245,14 +279,17 @@ int main(void)
 
 		while(1)
 	 { 
-
+			
 			if(espFlag==0) //ÔÚÎ´ÔøÁ¬ÉÏWIFIÊ±ºò£¬²Å½øÐÐWIFIÁ´½Ó²Ù×÷£¬Á´½ÓÉÏºó½«²»ÔÙÖ´ÐÐ´Ë²Ù×÷¡£
 			{ 
 				Wifi_Connect();			
 			}						
 			while (espFlag)
 			{					
-				
+// 				chaoshengboceju();
+// 			 Delay(100);
+// 			 printf("juli:%d   jishu:%d...biaozhi%d;",chaoshengjuli,chaoshengjishu,chaoshengjuliceshi);
+// 			 Delay(100);
 				//***********·Ö²¼²âÊÔ¹ý³Ì*********************
 // 				while(1)
 // 				{
@@ -642,6 +679,8 @@ u8 InfraredDetection(void)
 {
 	u8 HongWaiStatus=2;
 	
+		chaoshengboceju();  //³¬Éù²¨²â¾à
+	
 	T1 = GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_4);
 	//	printf("\n T1 = %d mV  \r\n",T1);
 // 		Delay(50);
@@ -658,12 +697,12 @@ u8 InfraredDetection(void)
 	T5 = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_6);
 	//printf("\n T5 = %d mV  \r\n",T5);
 // 		Delay(50);
-	clp = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_7);
-	//printf("\n clp = %d mV  \r\n",clp);
-// 		Delay(50);
-	distance = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_4);
-	//printf("\n distance = %d mV  \r\n",distance);
-// 		Delay(50);
+// 	clp = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_7);
+// 	//printf("\n clp = %d mV  \r\n",clp);
+// // 		Delay(50);
+// 	distance = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_4);
+// 	//printf("\n distance = %d mV  \r\n",distance);
+// // 		Delay(50);
 		
 	if( (!T1) && (!T2) && (!T3)&& (!T4)&& (!T5)&&((UploadCardNumber!=0) || (DownloadCardNumber!=0) || (Standby==1) ))//È«²¿±»ÕÚµ²Ê±,ÈÏÎª½øÈë¼õËÙ´ø£¬×¼±¸RFID¼ì²â
 	{
@@ -742,16 +781,25 @@ u8 InfraredDetection(void)
 
 		HongWaiStatus=8; //turn right 3(8)
 	}
-	if(distance)
-	{
-		HongWaiStatus=9; 		 //closely (9)
-	}
+// 	if(distance)
+// 	{
+// 		HongWaiStatus=9; 		 //closely (9)
+// 	}
 
-  if(clp)
-	{
-		HongWaiStatus=10; 		//Estop (10)
-	}
+//   if(clp)
+// 	{
+// 		HongWaiStatus=10; 		//Estop (10)
+// 	}
 	
+			if(chaoshengjishu <=220)
+		{
+			HongWaiStatus=9; 		 //closely (9)
+		}
+			if(chaoshengjishu <=180)
+		{
+			HongWaiStatus=10; 		 //Estop (10)
+		}
+
 	
 	return HongWaiStatus;
 	
@@ -764,7 +812,8 @@ void  Wifi_Connect(void)
  		
 	if(Wifi_Flag==0)
 		{
-			for(ifor=0;ifor<34;ifor++)
+			//for(ifor=0;ifor<34;ifor++)   //10.0.1.17:80
+			for(ifor=0;ifor<33;ifor++)   //10.0.1.4:80
 		{USART_SendData(USART1, senddata1[ifor] );
   while (!(USART1->SR & USART_FLAG_TXE));
 		}
@@ -979,4 +1028,14 @@ u8 RFIDReader(void)
 /****************ÒÔÉÏÎªRFID-RC522²Ù×÷******************************/
 }	
 
+
+/*****³¬Éù²¨²â¾à*********/
+/****340Ã×/s********/
+/******340ºÁÃ×(mm)/ms********/
+/****340Î¢Ã×(um)/us********/
+void chaoshengboceju(void)
+{
+chaoshengjuli = (chaoshengjishu * 340) / 2;
+	
+}
 

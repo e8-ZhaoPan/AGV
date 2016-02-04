@@ -28,6 +28,10 @@
 #include "AGV_pwm.h" 
 #include "Time_test.h"
 
+
+#define START_TIME4  T4time=0;RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4 , ENABLE);TIM_Cmd(TIM4, ENABLE)
+#define STOP_TIME4  TIM_Cmd(TIM4, DISABLE);RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4 , DISABLE)
+
 extern 	u8 Track,FLAG; 	 //行动路线
 extern	u8 USART_RX_BUF[64];     //接收缓冲,最大64个字节.
 extern	u8 counter_BUF;
@@ -38,6 +42,7 @@ extern  u8 Wifi_Touchuan; //透传标志
 extern	u8 USART_RX_BUF_LINK[64];     //LinkWifi时候接收缓冲,最大64个字节.
 extern  u8 WifiStartR;
 extern  volatile u32 T3time; // ms 计时变量  'volatile' 是定义易变变量，需要程序每次扫描都要读取内部的真实数据
+extern  volatile u32 T4time; // us 计时变量  'volatile' 是定义易变变量，需要程序每次扫描都要读取内部的真实数据
 extern  u8 TouYanZheng;
 extern  u8 timeout;//用于接收超时判断
 extern  u32 SysTickCountFlag ;  //SysTick中断计数
@@ -53,6 +58,11 @@ extern u8 Standby;
 extern   u8 UploadCardNumber,DownloadCardNumber;
 extern  void uartsend(u8 data);
 extern u8 ReadedCard;//初始化读取到的卡号
+extern volatile u8  chaoshengboF; //超声波标志
+extern volatile u32 chaoshengjishu;  //超声波定时器计数次数
+extern volatile u32 chaoshengjuli;   ////超声波检测距离(单位um)
+extern volatile u32 chaoshengjuliceshi;   ////超声波检测距离 (单位um)
+
 /** @addtogroup Template_Project
   * @{
   */
@@ -477,6 +487,80 @@ void TIM3_IRQHandler(void)
 			} 
 			
     } 
+	 //************定时器测试**********************
+		
+	
+}
+
+
+
+	//TIM4的定时器中断处理函数
+void TIM4_IRQHandler(void)
+{
+
+	
+	if ( TIM_GetITStatus(TIM4 , TIM_IT_Update) != RESET ) 
+	{	
+		TIM_ClearITPendingBit(TIM4 , TIM_FLAG_Update);    
+  	T4time++;
+		//chaoshengjuliceshi=1;
+	}	
+
+	 //*************定时器测试********************* 
+	if ( (chaoshengboF==0) && (T4time == 1) ) /*****开始发送控制开始检测*****/
+    {
+			
+				GPIO_SetBits(GPIOB, GPIO_Pin_7);		
+			chaoshengboF=1;  //进入等待20us状态
+		//chaoshengjuliceshi=2;
+			
+    } 	
+	
+	 if ( (chaoshengboF==1) && (T4time >=3) ) /***** 20us 时间到 *****/
+    {
+			GPIO_ResetBits(GPIOB, GPIO_Pin_7);		
+		//	STOP_TIME4;   /* TIM4 停止计时 */
+      T4time = 0;				     
+			chaoshengboF=2;  //进入等待回波状态
+	//chaoshengjuliceshi=3;
+    } 
+		
+		if ( (chaoshengboF==2) && (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_4)==1) ) /***** 等待回波*****/
+    {
+			
+// 			STOP_TIME4;   /* TIM4 停止计时 */
+      	 T4time = 0;				     
+			chaoshengboF=3;  //进入检测回波时长阶段
+		//chaoshengjuliceshi=4;
+			
+    } 
+		
+		if ( (chaoshengboF==3) && (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_4) != 1) ) /***** 等待回波*****/
+    {
+			
+ 			//STOP_TIME4;   /* TIM4 停止计时 */
+			chaoshengjishu = T4time ;
+      			     
+			chaoshengboF=4;  //检测周期结束
+			T4time = 0;
+		//	chaoshengjuliceshi=5;
+    } 
+		
+		
+		if ( (chaoshengboF==4) && (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_4) != 1) ) /***** 等待下次开始检测*****/
+    {
+			
+// 			STOP_TIME4;   /* TIM4 停止计时 */
+			
+      if(T4time >= 8000)	////等待80ms时间到
+			{				
+			chaoshengboF=0;  //等等待时间到
+			T4time = 0;
+				chaoshengjuliceshi=6;
+			}
+    } 
+		
+		
 	 //************定时器测试**********************
 		
 	

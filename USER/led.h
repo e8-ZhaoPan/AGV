@@ -28,6 +28,7 @@ void LED_GPIO_Config(void);
 void ControlDI_AGV_GPIO_Config(void);
 void ControlDO_AGV_GPIO_Config(void);
 void ControlDOC_AGV_GPIO_Config(void);		
-void BOOT1_ReleaseToGPIO(void);					
+void BOOT1_ReleaseToGPIO(void);		
+void Chaoshengbo_GPIO_Config(void);						
 
 #endif /* __LED_H */
